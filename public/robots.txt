@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://doctordent.kz
+
+# Sitemaps
+Sitemap: https://doctordent.kz/sitemap.xml
