@@ -1,0 +1,18 @@
+export const CITIES = [
+  { id: "almaty", name: { ru: "Алматы", kz: "Алматы" } },
+  { id: "astana", name: { ru: "Астана", kz: "Астана" } },
+  { id: "shymkent", name: { ru: "Шымкент", kz: "Шымкент" } },
+  { id: "karaganda", name: { ru: "Караганда", kz: "Қарағанды" } },
+  { id: "aktobe", name: { ru: "Актобе", kz: "Ақтөбе" } },
+  { id: "taraz", name: { ru: "Тараз", kz: "Тараз" } },
+  { id: "pavlodar", name: { ru: "Павлодар", kz: "Павлодар" } },
+  { id: "oskemen", name: { ru: "Усть-Каменогорск", kz: "Өскемен" } },
+  { id: "semey", name: { ru: "Семей", kz: "Семей" } },
+  { id: "atyrau", name: { ru: "Атырау", kz: "Атырау" } },
+  { id: "aktau", name: { ru: "Актау", kz: "Ақтау" } },
+  { id: "uralsk", name: { ru: "Уральск", kz: "Орал" } },
+  { id: "kostanay", name: { ru: "Костанай", kz: "Қостанай" } },
+  { id: "kokshetau", name: { ru: "Кокшетау", kz: "Көкшетау" } },
+  { id: "kyzylorda", name: { ru: "Кызылорда", kz: "Қызылорда" } },
+  { id: "petropavlovsk", name: { ru: "Петропавловск", kz: "Петропавл" } },
+];

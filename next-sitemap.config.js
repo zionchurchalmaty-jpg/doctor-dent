@@ -1,5 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://doctordent.kz',
+  siteUrl: process.env.SITE_URL || 'https://dentdoctor.kz',
   generateRobotsTxt: true,
 }
