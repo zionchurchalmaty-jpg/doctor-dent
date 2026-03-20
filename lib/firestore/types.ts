@@ -5,6 +5,49 @@ export interface LocalizedText {
   ru: string;
   kz: string;
 }
+export interface LocalizedText {
+  ru: string;
+  kz: string;
+}
+
+export interface DoctorEducationGroup {
+  title: LocalizedText;
+  items: LocalizedText[];
+}
+
+export interface DoctorLocation {
+  cityId: string;
+  address: LocalizedText;
+  phone: string;
+  schedule: LocalizedText;
+  link2gis: string;
+}
+
+export interface DoctorCase {
+  title: LocalizedText;
+  duration: LocalizedText;
+  price: string;
+  beforeImage: string;
+  afterImage: string;
+  description: LocalizedText;
+}
+
+export interface DoctorCertificate {
+  url?: string;
+  name?: string; 
+}
+
+export interface DoctorReview {
+  authorName: LocalizedText;
+  text: LocalizedText;
+  rating: number;
+  date: string;
+}
+
+export interface DoctorFAQ {
+  question: LocalizedText;
+  answer: LocalizedText;
+}
 
 export interface SEOData {
   metaTitle: string;
@@ -14,19 +57,6 @@ export interface SEOData {
   noIndex: boolean;
   schemaMarkup?: string;
 }
-
-export interface DoctorCase {
-  beforeImage: string;
-  afterImage: string;
-  description: LocalizedText;
-}
-
-export interface DoctorReview {
-  authorName: LocalizedText;
-  text: LocalizedText;
-  rating: number;
-}
-
 export interface DoctorPrice {
   serviceName: LocalizedText;
   price: number;
@@ -55,6 +85,7 @@ export interface DoctorProfile {
   cases: DoctorCase[];
   reviews: DoctorReview[];
   prices: DoctorPrice[];
+  faq: DoctorFAQ[];
   location: LocalizedText;
 }
 

@@ -23,7 +23,14 @@ export function DoctorCasesTab() {
         <Button 
           type="button" 
           variant="outline" 
-          onClick={() => append({ beforeImage: "", afterImage: "", description: { ru: "", kz: "" } })}
+          onClick={() => append({ 
+            title: { ru: "", kz: "" },
+            duration: { ru: "", kz: "" },
+            price: "",
+            beforeImage: "", 
+            afterImage: "", 
+            description: { ru: "", kz: "" } 
+          })}
         >
           <Plus className="w-4 h-4 mr-2" /> Добавить кейс
         </Button>
@@ -43,7 +50,33 @@ export function DoctorCasesTab() {
               <Trash2 className="w-4 h-4" />
             </Button>
 
-            <h3 className="font-medium mb-4">Кейс #{index + 1}</h3>
+            <h3 className="font-medium mb-6">Кейс #{index + 1}</h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <Label className="mb-2 block">Название кейса (RU)</Label>
+                <Input {...register(`cases.${index}.title.ru`)} placeholder="Тотальная имплантация All-on-4" />
+              </div>
+              <div>
+                <Label className="mb-2 block">Название кейса (KZ)</Label>
+                <Input {...register(`cases.${index}.title.kz`)} placeholder="All-on-4 толық имплантациясы" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div>
+                <Label className="mb-2 block">Срок лечения (RU)</Label>
+                <Input {...register(`cases.${index}.duration.ru`)} placeholder="3 месяца" />
+              </div>
+              <div>
+                <Label className="mb-2 block">Срок лечения (KZ)</Label>
+                <Input {...register(`cases.${index}.duration.kz`)} placeholder="3 ай" />
+              </div>
+              <div>
+                <Label className="mb-2 block">Цена (₸)</Label>
+                <Input {...register(`cases.${index}.price`)} placeholder="1 500 000" />
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>

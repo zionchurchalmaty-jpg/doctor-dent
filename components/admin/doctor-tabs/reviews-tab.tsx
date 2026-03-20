@@ -18,7 +18,7 @@ export function DoctorReviewsTab() {
     <TabsContent value="reviews" className="mt-0 space-y-6">
       <div className="flex items-center justify-between border-b pb-2 mb-4">
         <h2 className="text-xl font-bold">9. Отзывы пациентов</h2>
-        <Button type="button" variant="outline" onClick={() => append({ authorName: { ru: "", kz: "" }, text: { ru: "", kz: "" }, rating: 5 })}>
+        <Button type="button" variant="outline" onClick={() => append({ authorName: { ru: "", kz: "" }, text: { ru: "", kz: "" }, rating: 5, date: "" })}>
           <Plus className="w-4 h-4 mr-2" /> Добавить отзыв
         </Button>
       </div>
@@ -30,7 +30,7 @@ export function DoctorReviewsTab() {
               <Trash2 className="w-4 h-4" />
             </Button>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4 pr-12">
               <div>
                 <Label>Имя пациента (RU)</Label>
                 <Input {...register(`reviews.${index}.authorName.ru`)} placeholder="Алия К." />
@@ -38,6 +38,10 @@ export function DoctorReviewsTab() {
               <div>
                 <Label>Имя пациента (KZ)</Label>
                 <Input {...register(`reviews.${index}.authorName.kz`)} placeholder="Әлия Қ." />
+              </div>
+              <div>
+                <Label>Дата отзыва</Label>
+                <Input type="date" {...register(`reviews.${index}.date`)} />
               </div>
             </div>
 
