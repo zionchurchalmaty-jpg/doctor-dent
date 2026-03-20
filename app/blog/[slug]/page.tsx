@@ -4,7 +4,6 @@ import Image from "next/image";
 import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
-import { ArticleClient } from "@/components/blog/article-client";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -86,13 +85,6 @@ export default async function BlogPostPage({ params }: PageProps) {
               />
             </div>
           )}
-
-          <ArticleClient
-            content={article.content}
-            previewContent={article.previewContent || article.excerpt}
-            correctPassword={article.password}
-            locale="ru"
-          />
         </article>
       </main>
     </>
