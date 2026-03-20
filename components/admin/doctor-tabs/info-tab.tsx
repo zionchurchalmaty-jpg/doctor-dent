@@ -55,9 +55,22 @@ export function DoctorInfoTab() {
 
   return (
     <TabsContent value="info" className="mt-0 space-y-10">
+      <section>
+        <h2 className="text-xl font-bold border-b pb-2 mb-4">Краткое описание (УТП)</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+             <Label>Текст (RU)</Label>
+             <Input {...register("shortDescription.ru")} placeholder="Приживаемость 99%. Гарантия 10 лет" />
+          </div>
+          <div className="space-y-2">
+             <Label>Текст (KZ)</Label>
+             <Input {...register("shortDescription.kz")} placeholder="Өміршеңдігі 99%. 10 жыл кепілдік" />
+          </div>
+        </div>
+      </section>
       
       <section>
-        <h2 className="text-xl font-bold border-b pb-2 mb-4">3. Видео кейс / Обращение</h2>
+        <h2 className="text-xl font-bold border-b pb-2 mb-4">Видео кейс / Обращение</h2>
         <div className="max-w-xl space-y-2">
           <Label>Ссылка на YouTube / Vimeo</Label>
           <Input {...register("videoUrl")} placeholder="https://youtube.com/watch?v=..." />
@@ -66,7 +79,7 @@ export function DoctorInfoTab() {
 
       <section>
         <div className="flex items-center justify-between border-b pb-2 mb-4">
-          <h2 className="text-xl font-bold">5. Опыт и образование</h2>
+          <h2 className="text-xl font-bold">Опыт и образование</h2>
           <Button type="button" variant="outline" onClick={() => appendEdu({ title: { ru: "", kz: "" }, items: [] })}>
             <Plus className="w-4 h-4 mr-2" /> Добавить блок (Заголовок)
           </Button>
@@ -94,7 +107,7 @@ export function DoctorInfoTab() {
 
       <section>
         <div className="flex items-center justify-between border-b pb-2 mb-4">
-          <h2 className="text-xl font-bold">7. Оборудование и диагностика</h2>
+          <h2 className="text-xl font-bold">Оборудование и диагностика</h2>
           <Button type="button" variant="outline" onClick={() => appendEq({ ru: "", kz: "" })}>
             <Plus className="w-4 h-4 mr-2" /> Добавить оборудование
           </Button>
