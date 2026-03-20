@@ -3,11 +3,10 @@ import { getContentBySlug } from "@/lib/firestore/content";
 import Image from "next/image";
 import { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Lock, Calendar } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { ArrowLeft, Calendar } from "lucide-react";
 
 interface PageProps {
-  params: Promise<{ slug: string; locale: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({
@@ -26,7 +25,7 @@ export async function generateMetadata({
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const { slug, locale } = await params;
+  const { slug } = await params;
 
   const article = await getContentBySlug(slug, "blog");
 
@@ -40,10 +39,11 @@ export default async function BlogPostPage({ params }: PageProps) {
       ? rawDate.toDate()
       : new Date(rawDate || Date.now());
 
-  const formattedDate = dateObject.toLocaleDateString(
-    locale === "kz" ? "kk-KZ" : "ru-RU",
-    { day: "2-digit", month: "long", year: "numeric" },
-  );
+  const formattedDate = dateObject.toLocaleDateString("ru-RU", { 
+    day: "2-digit", 
+    month: "long", 
+    year: "numeric" 
+  });
 
   return (
     <>
@@ -56,11 +56,11 @@ export default async function BlogPostPage({ params }: PageProps) {
       <main className="min-h-screen bg-white pt-24 pb-16">
         <article className="max-w-3xl mx-auto px-6">
           <Link
-            href={`/seo-blog`}
+            href={`/blog`}
             className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[#1A73E8] transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            {locale === "ru" ? "Назад к блогу" : "Блогқа қайту"}
+            Назад к блогу
           </Link>
 
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -85,6 +85,14 @@ export default async function BlogPostPage({ params }: PageProps) {
               />
             </div>
           )}
+
+          {article.content && (
+            <div 
+              className="prose prose-lg max-w-none text-gray-800"
+              dangerouslySetInnerHTML={{ __html: article.content }}
+            />
+          )}
+
         </article>
       </main>
     </>
