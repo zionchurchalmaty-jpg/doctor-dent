@@ -14,7 +14,7 @@ export interface DoctorCardProps {
   reviewsCount?: number;
   experienceYears?: number;
   location?: string;
-  shortDescription?: string | null;
+  shortDescription?: string | null; 
   quote?: {
     text: string;
     author: string;
