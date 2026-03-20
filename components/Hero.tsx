@@ -7,7 +7,6 @@ import {
   BookOpen, 
   Clock, 
   MapPin, 
-  Languages, 
   Calendar, 
   Phone 
 } from "lucide-react";
@@ -114,15 +113,9 @@ export default function Hero({
 
   if (variant === "blog") {
     const blogFeatures = [
-      locale === "ru"
-        ? "Экспертные советы от врачей"
-        : "Дәрігерлердің сарапшылық кеңестері",
-      locale === "ru"
-        ? "Гиды по процедурам и лечению"
-        : "Емдеу және процедуралар бойынша нұсқаулықтар",
-      locale === "ru"
-        ? "Актуальные новости стоматологии"
-        : "Стоматологияның өзекті жаңалықтары",
+      "Экспертные советы от врачей",
+      "Гиды по процедурам и лечению",
+      "Актуальные новости стоматологии",
     ];
 
     return (
@@ -131,13 +124,10 @@ export default function Hero({
           <div className="flex flex-col gap-8 text-white relative z-10">
             <div className="space-y-4">
               <h1 className="text-4xl lg:text-5xl font-bold leading-[1.1]">
-                {title || (locale === "ru" ? "Блог" : "Блог")}
+                {title || "Блог"}
               </h1>
               <p className="text-blue-100 text-lg max-w-md">
-                {subtitle ||
-                  (locale === "ru"
-                    ? "Полезные статьи о стоматологии, здоровье зубов и современных методах лечения"
-                    : "Стоматология, тіс саулығы және заманауи емдеу әдістері туралы пайдалы мақалалар")}
+                {subtitle || "Полезные статьи о стоматологии, здоровье зубов и современных методах лечения"}
               </p>
             </div>
 
@@ -167,7 +157,7 @@ export default function Hero({
               </div>
               <div className="p-8">
                 <h3 className="font-bold text-gray-900 text-sm mb-4 uppercase tracking-wider">
-                  {locale === "ru" ? "Популярные темы" : "Танымал тақырыптар"}
+                  Популярные темы
                 </h3>
 
                 <div className="flex flex-wrap gap-2">
@@ -182,9 +172,7 @@ export default function Hero({
                     ))
                   ) : (
                     <span className="text-gray-400 text-xs italic">
-                      {locale === "ru"
-                        ? "Темы появятся позже"
-                        : "Тақырыптар жақында пайда болады"}
+                      Темы появятся позже
                     </span>
                   )}
                 </div>

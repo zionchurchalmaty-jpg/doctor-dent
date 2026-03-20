@@ -50,10 +50,30 @@ export function ContentList({
     string,
     { basePath: string; publicPath: string; label: string; meta: string }
   > = {
-    blog: { basePath: "/admin/blog", publicPath: "/blog", label: "Статья", meta: "Теги" },
-    cases: { basePath: "/admin/cases", publicPath: "/cases", label: "Проект", meta: "Теги" },
-    leads: { basePath: "/admin/leads", publicPath: "", label: "Клиент", meta: "Телефон" },
-    doctors: { basePath: "/admin/doctors", publicPath: "/doctor", label: "Врач", meta: "Инфо" },
+    blog: {
+      basePath: "/admin/blog",
+      publicPath: "/blog",
+      label: "Статья",
+      meta: "Теги",
+    },
+    cases: {
+      basePath: "/admin/cases",
+      publicPath: "/cases",
+      label: "Проект",
+      meta: "Теги",
+    },
+    leads: {
+      basePath: "/admin/leads",
+      publicPath: "",
+      label: "Клиент",
+      meta: "Телефон",
+    },
+    doctors: {
+      basePath: "/admin/doctors",
+      publicPath: "/doctor",
+      label: "Врач",
+      meta: "Инфо",
+    },
     consents: {
       basePath: "/admin/consents",
       publicPath: "",
@@ -158,6 +178,14 @@ export function ContentList({
                   className="hover:bg-slate-50 transition-colors"
                 >
                   <td className="px-6 py-4 align-top">
+                    <div className="font-medium text-slate-900 flex items-center gap-2">
+                      {item.title}
+                      {!isSimpleMessage && item.isSeo && (
+                        <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-bold rounded-full">
+                          SEO СТАТЬЯ
+                        </span>
+                      )}
+                    </div>
                     <div className="font-medium text-slate-900">
                       {item.title}
                     </div>
@@ -189,17 +217,23 @@ export function ContentList({
                   </td>
                   <td className="px-6 py-4 align-top text-right">
                     <div className="flex justify-end gap-1">
-                      {!isSimpleMessage && item.slug && item.status === "published" && (
-                        <a
-                          href={`${currentConfig.publicPath}/${item.slug}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 text-slate-400 hover:text-[#1A73E8] hover:bg-blue-50 rounded transition-colors"
-                          title="Открыть на сайте"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      )}
+                      {!isSimpleMessage &&
+                        item.slug &&
+                        item.status === "published" && (
+                          <a
+                            href={
+                              item.isSeo
+                                ? `/${item.slug}`
+                                : `${currentConfig.publicPath}/${item.slug}`
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 text-slate-400 hover:text-[#1A73E8] hover:bg-blue-50 rounded transition-colors"
+                            title="Открыть на сайте"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        )}
 
                       {!isSimpleMessage && (
                         <Link

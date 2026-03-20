@@ -59,10 +59,7 @@ export function ContentForm({
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
   const [excerpt, setExcerpt] = useState(initialData?.excerpt || "");
-  
-  const [isPaid, setIsPaid] = useState(initialData?.isPaid || false);
-  const [password, setPassword] = useState(initialData?.password || "");
-  const [previewContent, setPreviewContent] = useState(initialData?.previewContent || "");
+  const [isSeo, setIsSeo] = useState(initialData?.isSeo || false);
 
   const [image, setImage] = useState(
     initialData?.image || initialData?.coverImage || "",
@@ -124,11 +121,6 @@ export function ContentForm({
       return;
     }
 
-    if (isPaid && !password.trim()) {
-      setError("Для платной статьи необходим пароль");
-      return;
-    }
-
     setError(null);
     setSaving(true);
 
@@ -142,9 +134,7 @@ export function ContentForm({
         tags,
         status: finalStatus,
         seo,
-        isPaid,
-        password: isPaid ? password : "",
-        previewContent: isPaid ? previewContent : "",
+        isSeo,
       };
 
       if (isEditing && initialData) {
@@ -230,22 +220,9 @@ export function ContentForm({
           </div>
 
           <div className="space-y-2">
-            <Label>Содержимое (скрытое паролем)</Label>
+            <Label>Содержимое</Label>
             <ContentEditor content={content} onChange={setContent} placeholder="Напишите основной текст здесь..." />
           </div>
-
-          {isPaid && (
-            <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
-              <Label htmlFor="previewContent" className="text-[#1A73E8] flex items-center gap-2">
-                <Unlock className="w-4 h-4" /> Превью содержания (доступно всем)
-              </Label>
-              <ContentEditor
-                content={previewContent}
-                onChange={setPreviewContent}
-                placeholder="Этот текст будет виден ДО ввода пароля..."
-              />
-            </div>
-          )}
 
           <div className="space-y-2">
             <Label htmlFor="excerpt">Краткое описание (для списка статей)</Label>
@@ -254,45 +231,22 @@ export function ContentForm({
         </div>
 
         <div className="space-y-6">
-          <div className="space-y-4 rounded-lg border bg-card p-4 shadow-sm">
-            <h3 className="font-medium text-navy flex items-center gap-2">
-               Настройки доступа
-            </h3>
-
-            <div className="space-y-2">
-              <Label>Тип контента</Label>
-              <Select
-                value={isPaid ? "paid" : "free"}
-                onValueChange={(v) => setIsPaid(v === "paid")}
-              >
-                <SelectTrigger className={isPaid ? "border-[#1A73E8] bg-blue-50" : ""}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">Бесплатная статья</SelectItem>
-                  <SelectItem value="paid">Платная статья</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {isPaid && (
-              <div className="space-y-2 animate-in zoom-in-95 duration-200">
-                <Label htmlFor="password">Пароль для доступа</Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type="text"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Придумайте пароль"
-                    className="pr-10 border-[#1A73E8]"
-                  />
-                  <Lock className="absolute right-3 top-2.5 h-4 w-4 text-[#1A73E8]" />
-                </div>
-              </div>
-            )}
-
-            <hr className="my-4" />
+<div className="space-y-2">
+  <Label>Размещение статьи</Label>
+  <Select
+    value={isSeo ? "seo" : "blog"}
+    onValueChange={(v) => setIsSeo(v === "seo")}
+  >
+    <SelectTrigger>
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="blog">В блоге (/blog/slug)</SelectItem>
+      <SelectItem value="seo">SEO-статья (/slug)</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+            
 
             <div className="space-y-2">
               <Label htmlFor="status">Статус публикации</Label>
@@ -316,6 +270,5 @@ export function ContentForm({
           <SEOFields value={seo} onChange={setSeo} defaultTitle={title} image={image} />
         </div>
       </div>
-    </div>
   );
 }
