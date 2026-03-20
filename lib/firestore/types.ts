@@ -34,7 +34,7 @@ export interface DoctorCase {
 
 export interface DoctorCertificate {
   url?: string;
-  name?: string; 
+  name?: string;
 }
 
 export interface DoctorReview {
@@ -76,11 +76,12 @@ export interface DoctorProfile {
   name: LocalizedText;
   specialty: LocalizedText;
   experienceYears: number;
-  reasons: { ru: string[]; kz: string[] };
+  reasons: LocalizedText[];
   videoUrl?: string;
-  services: { ru: string[]; kz: string[] };
+  services: LocalizedText[];
   education: LocalizedText;
   certificates: string[];
+  shortDescription?: LocalizedText;
   equipment: LocalizedText;
   cases: DoctorCase[];
   reviews: DoctorReview[];
@@ -117,7 +118,10 @@ export interface ContentInput extends Partial<Content> {
   status: ContentStatus;
 }
 
-export interface SerializedContent extends Omit<Content, 'date' | 'createdAt' | 'updatedAt'> {
+export interface SerializedContent extends Omit<
+  Content,
+  "date" | "createdAt" | "updatedAt"
+> {
   date?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;

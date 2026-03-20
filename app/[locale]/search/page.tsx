@@ -61,7 +61,7 @@ export default async function SearchPage({
   rating={rating}
   reviewsCount={reviewsCount}
   experienceYears={doc.experienceYears}
-  location={doc.location?.address?.[locale]?.split(",")[0] || "Алматы"}
+location={doc.location?.[locale as "ru" | "kz"]?.split(",")[0] || "Алматы"}
   shortDescription={doc.shortDescription?.[locale] || doc.reasons?.[0]?.[locale]}
   price={minPrice}
   lang={locale as "ru" | "kz"}
