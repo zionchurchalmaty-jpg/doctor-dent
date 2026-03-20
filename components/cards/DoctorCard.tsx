@@ -41,6 +41,7 @@ export default function DoctorCard({
 }: DoctorCardProps) {
   
   const t = useTranslations('HomePage.TopDoctors.DoctorCard');
+  
   const formattedPrice = new Intl.NumberFormat(lang === 'kz' ? 'kk-KZ' : 'ru-RU')
     .format(price)
     .replace(/,/g, ' ');
@@ -56,7 +57,6 @@ export default function DoctorCard({
           #{topRank}
         </div>
       )}
-
       <div className="relative h-56 w-full shrink-0 bg-gray-100 rounded-t-[22px] overflow-hidden">
         <Image 
           src={image || "/images/placeholder.png"} 
@@ -71,7 +71,6 @@ export default function DoctorCard({
           <h3 className="text-[18px] font-bold text-gray-900 leading-snug mb-1">{name}</h3>
           <p className="text-sm text-gray-500">{specialty}</p>
         </div>
-
         <div className="flex items-center gap-3 mb-4">
           {rating !== undefined && (
             <div className="flex items-center gap-1.5 bg-[#FFF9EB] px-2.5 py-1 rounded-lg">
@@ -83,7 +82,6 @@ export default function DoctorCard({
             <span className="text-sm text-gray-500">{reviewsCount} {t('reviews')}</span>
           )}
         </div>
-
         <div className="flex items-center gap-5 mb-5 text-sm text-gray-500">
           {experienceYears !== undefined && (
             <div className="flex items-center gap-1.5">
@@ -98,13 +96,11 @@ export default function DoctorCard({
             </div>
           )}
         </div>
-
         {shortDescription && (
           <div className="bg-[#F0F5FF] text-[#2563EB] text-sm px-4 py-3 rounded-xl mb-4 font-medium">
             {shortDescription}
           </div>
         )}
-
         {quote ? (
           <div className="bg-[#F8F9FA] p-4 rounded-xl mb-6 flex-grow">
             <p className="text-sm text-gray-600 italic line-clamp-2 mb-2">
@@ -115,7 +111,6 @@ export default function DoctorCard({
         ) : (
           <div className="mb-6 flex-grow" />
         )}
-
         <div className="flex items-end justify-between mt-auto pt-4 border-t border-gray-50">
           <div>
             <p className="text-xs text-gray-400 mb-1">{t('price')}</p>

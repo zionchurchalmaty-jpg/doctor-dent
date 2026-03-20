@@ -10,7 +10,6 @@ import {
 } from "@/lib/firestore/content";
 import { DoctorProfile } from "@/lib/firestore/types";
 import Hero from "@/components/Hero";
-import Navbar from "@/components/Navbar";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
@@ -23,7 +22,6 @@ export default async function HomePage({
   const lang = locale === "kz" ? "kz" : "ru";
 
   const t = await getTranslations("HomePage");
-
   const topIds = await getTopDoctorsIds();
   const topDoctorsPromises = topIds
     .filter((id) => id !== "")
@@ -34,32 +32,61 @@ export default async function HomePage({
     (doc) => doc !== null,
   ) as unknown as DoctorProfile[];
   const heroDoctor = topDoctors.length > 0 ? topDoctors[0] : null;
-
   const promosData = await getPublishedContent("promos", 3);
 
   return (
     <div className="min-h-screen">
       <Hero topDoctor={heroDoctor} />
 
-      <main className="bg-[#F8F9FA] pb-20">
+      <main className="bg-[#F8F9FA] pb-20 pt-10">
         <ContentGrid
           title={t("TopDoctors.topTitle")}
           subtitle={t("TopDoctors.topSubtitle")}
           icon={<Star className="w-8 h-8 fill-yellow-400 text-yellow-400" />}
-          items={topDoctors.map((doctor, index) => (
-            <DoctorCard
-              key={doctor.id}
-              id={doctor.id}
-              name={doctor.name?.[lang]}
-              specialty={doctor.specialty?.[lang]}
-              price={doctor.prices?.[0]?.price || 0}
-              image={doctor.photo}
-              location={doctor.location?.[lang]}
-              experienceYears={doctor.experienceYears}
-              isTop={true}
-              topRank={index + 1}
-            />
-          ))}
+          items={topDoctors.map((doctor, index) => {
+            const reviews = doctor.reviews || [];
+            const reviewsCount = reviews.length;
+            const avgRating =
+              reviewsCount > 0
+                ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviewsCount
+                : 5.0;
+
+            const reviewSnippet =
+              reviewsCount > 0
+                ? {
+                    text: reviews[0].text[lang],
+                    author: reviews[0].authorName[lang],
+                  }
+                : null;
+                const fullAddress = doctor.location?.address?.[lang];
+            const shortLocation = fullAddress
+              ? fullAddress.split(",")[0]
+              : "Город не указан";
+
+            return (
+              <div key={doctor.id} className="pt-4 pl-4">
+                <DoctorCard
+                  id={doctor.slug || doctor.id}
+                  name={doctor.name?.[lang]}
+                  specialty={doctor.specialty?.[lang]}
+                  price={doctor.prices?.[0]?.price || 0}
+                  image={doctor.photo}
+                  location={shortLocation}
+                  experienceYears={doctor.experienceYears}
+                  rating={avgRating}
+                  reviewsCount={reviewsCount}
+                  shortDescription={
+                    doctor.shortDescription?.[lang] ||
+                    doctor.reasons?.[0]?.[lang]
+                  }
+                  quote={reviewSnippet}
+                  isTop={true}
+                  topRank={index + 1}
+                  lang={lang as "ru" | "kz"}
+                />
+              </div>
+            );
+          })}
           rows={1}
           showPagination={false}
           bottomContent={
