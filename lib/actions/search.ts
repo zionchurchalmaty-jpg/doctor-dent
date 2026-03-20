@@ -12,8 +12,12 @@ export async function getSearchFilters(locale: "ru" | "kz") {
   const specialties = new Set<string>();
 
   doctors.forEach((doc) => {
-    if (doc.location?.[locale]) cities.add(doc.location[locale]);
-    if (doc.specialty?.[locale]) specialties.add(doc.specialty[locale]);
+    const fullAddress = doc.location?.address?.[locale];
+    const city = fullAddress ? fullAddress.split(",")[0] : null;
+    if (city) cities.add(city);
+    if (doc.specialty?.[locale]) {
+      specialties.add(doc.specialty[locale]);
+    }
   });
 
   return {
@@ -33,9 +37,10 @@ export async function searchDoctors(
 
   return doctors.filter((doc) => {
     const matchCity = city
-      ? doc.location?.[locale]?.toLowerCase().includes(city.toLowerCase())
+      ? doc.location?.address?.[locale]
+          ?.toLowerCase()
+          .includes(city.toLowerCase())
       : true;
-
     const matchSpecialty = specialty
       ? doc.specialty?.[locale]?.toLowerCase().includes(specialty.toLowerCase())
       : true;
