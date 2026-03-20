@@ -30,7 +30,7 @@ export interface DoctorCase {
 
 export interface DoctorCertificate {
   url?: string;
-  name?: string; 
+  name?: string;
 }
 
 export interface DoctorReview {
@@ -117,7 +117,10 @@ export interface ContentInput extends Partial<Content> {
   status: ContentStatus;
 }
 
-export interface SerializedContent extends Omit<Content, 'date' | 'createdAt' | 'updatedAt'> {
+export interface SerializedContent extends Omit<
+  Content,
+  "date" | "createdAt" | "updatedAt"
+> {
   date?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;

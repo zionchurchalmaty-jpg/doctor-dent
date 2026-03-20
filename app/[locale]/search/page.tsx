@@ -53,19 +53,19 @@ export default async function SearchPage({
 
               return (
                 <DoctorCard
-                  key={doc.id}
-                  id={doc.id}
-                  image={doc.photo}
-                  name={doc.name?.[locale] || ""}
-                  specialty={doc.specialty?.[locale] || ""}
-                  rating={rating}
-                  reviewsCount={reviewsCount}
-                  experienceYears={doc.experienceYears}
-                  location={doc.location?.[locale]}
-                  features={doc.services?.[locale]?.slice(0, 2)}
-                  price={minPrice}
-                  lang={locale}
-                />
+  key={doc.id}
+  id={doc.slug || doc.id}
+  image={doc.photo}
+  name={doc.name?.[locale] || ""}
+  specialty={doc.specialty?.[locale] || ""}
+  rating={rating}
+  reviewsCount={reviewsCount}
+  experienceYears={doc.experienceYears}
+location={doc.location?.[locale as "ru" | "kz"]?.split(",")[0] || "Алматы"}
+  shortDescription={doc.shortDescription?.[locale] || doc.reasons?.[0]?.[locale]}
+  price={minPrice}
+  lang={locale as "ru" | "kz"}
+/>
               );
             })}
           </div>
