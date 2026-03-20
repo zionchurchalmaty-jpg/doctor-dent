@@ -5,10 +5,6 @@ export interface LocalizedText {
   ru: string;
   kz: string;
 }
-export interface LocalizedText {
-  ru: string;
-  kz: string;
-}
 
 export interface DoctorEducationGroup {
   title: LocalizedText;
@@ -57,6 +53,7 @@ export interface SEOData {
   noIndex: boolean;
   schemaMarkup?: string;
 }
+
 export interface DoctorPrice {
   serviceName: LocalizedText;
   price: number;
@@ -75,18 +72,21 @@ export interface DoctorProfile {
   photo: string;
   name: LocalizedText;
   specialty: LocalizedText;
+  shortDescription?: LocalizedText;
   experienceYears: number;
-  reasons: { ru: string[]; kz: string[] };
+  
+  reasons: LocalizedText[]; 
+  services: LocalizedText[];
+  equipment: LocalizedText[];
+  
   videoUrl?: string;
-  services: { ru: string[]; kz: string[] };
-  education: LocalizedText;
-  certificates: string[];
-  equipment: LocalizedText;
+  education: DoctorEducationGroup[];
+  certificates: DoctorCertificate[];
   cases: DoctorCase[];
   reviews: DoctorReview[];
   prices: DoctorPrice[];
   faq: DoctorFAQ[];
-  location: LocalizedText;
+  location: DoctorLocation;
 }
 
 export interface Content {
