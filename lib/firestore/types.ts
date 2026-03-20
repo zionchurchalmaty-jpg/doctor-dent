@@ -106,15 +106,16 @@ export interface Content {
   updatedAt?: { toDate: () => Date };
   createdBy?: string;
   authorName?: string;
-  isPaid?: boolean;
   password?: string;
   previewContent?: string;
+  isSeo?: boolean;
 }
 
 export interface ContentInput extends Partial<Content> {
   contentType: ContentType;
   title: string;
   status: ContentStatus;
+  isSeo?: boolean;
 }
 
 export interface SerializedContent extends Omit<
@@ -124,4 +125,5 @@ export interface SerializedContent extends Omit<
   date?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;
+  isSeo?: boolean;
 }

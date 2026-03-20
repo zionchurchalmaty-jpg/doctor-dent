@@ -4,7 +4,6 @@ import Image from "next/image";
 import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Lock, Calendar } from "lucide-react";
-import { ArticleClient } from "@/components/blog/article-client";
 import { getTranslations } from "next-intl/server";
 
 interface PageProps {
@@ -57,7 +56,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       <main className="min-h-screen bg-white pt-24 pb-16">
         <article className="max-w-3xl mx-auto px-6">
           <Link
-            href={`/${locale}/blog`}
+            href={`/seo-blog`}
             className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[#1A73E8] transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -73,12 +72,6 @@ export default async function BlogPostPage({ params }: PageProps) {
               <Calendar className="w-4 h-4" />
               {formattedDate}
             </span>
-            {article.isPaid && (
-              <span className="flex items-center gap-1.5 text-[#1A73E8] font-bold">
-                <Lock className="w-3.5 h-3.5" />
-                {locale === "ru" ? "Приватный материал" : "Жабық материал"}
-              </span>
-            )}
           </div>
 
           {article.image && (
@@ -92,14 +85,6 @@ export default async function BlogPostPage({ params }: PageProps) {
               />
             </div>
           )}
-
-          <ArticleClient
-            content={article.content}
-            previewContent={article.previewContent || article.excerpt}
-            isPaid={article.isPaid || false}
-            correctPassword={article.password}
-            locale={locale}
-          />
         </article>
       </main>
     </>

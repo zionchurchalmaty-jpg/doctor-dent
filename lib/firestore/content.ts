@@ -75,6 +75,7 @@ function toFirestoreData(input: any, authorId: string, authorName: string) {
   return {
     ...input,
     slug,
+    isSeo: input.isSeo ?? false,
     image: mainImageUrl,
     seo: {
       metaTitle: input.seo?.metaTitle || "",
@@ -138,6 +139,7 @@ export async function updateContent(id: string, input: any): Promise<void> {
   await updateDoc(ref, {
     ...input,
     slug,
+    isSeo: input.isSeo ?? false,
     image: mainImageUrl,
     seo: { 
         ...(input.seo ?? existing.data()?.seo), 

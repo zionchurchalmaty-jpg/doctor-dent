@@ -26,8 +26,8 @@ export default function Navbar() {
 
       <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-gray-700">
         <Link href={`/${locale}`} className="hover:text-blue-600 transition-colors">{t('home')}</Link>
-        <Link href={`/${locale}/cases`} className="hover:text-blue-600 transition-colors">{t('cases')}</Link>
-        <Link href={`/${locale}/blog`} className="hover:text-blue-600 transition-colors">{t('blog')}</Link>
+        <Link href={`/cases`} className="hover:text-blue-600 transition-colors">{t('cases')}</Link>
+        <Link href={`/blog`} className="hover:text-blue-600 transition-colors">{t('blog')}</Link>
         <Link href={`/${locale}/rent`} className="hover:text-blue-600 transition-colors">{t('rent')}</Link>
         <Link href={`/${locale}/about`} className="hover:text-blue-600 transition-colors">{t('about')}</Link>
       </nav>
