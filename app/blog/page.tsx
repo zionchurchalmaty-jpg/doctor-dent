@@ -64,6 +64,7 @@ export default async function BlogPage() {
                 key={article.id}
                 id={article.id}
                 image={article.image || "/images/blog-placeholder.png"}
+                imageAlt={article.seo?.imageAlt || article.title}
                 category={getSingleCategory(article)} 
                 date={rawDate} 
                 title={article.title}

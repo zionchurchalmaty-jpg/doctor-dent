@@ -3,9 +3,9 @@ import ArticleCard from "@/components/cards/ArticleCard";
 import Hero from "@/components/Hero"; 
 import { getPublishedContent } from "@/lib/firestore/content";
 
-export default async function SeoBlogPage() {
+export default async function BlogPage() {
   const rawArticlesData = await getPublishedContent("blog");
-  const articlesData = rawArticlesData.filter((article: any) => article.isSeo === true);
+  const articlesData = rawArticlesData.filter((article: any) => !article.isSeo);
 
   let allCategories: string[] = [];
   articlesData.forEach((article: any) => {
@@ -53,7 +53,7 @@ export default async function SeoBlogPage() {
 
       <main className="bg-[#F8F9FA] pb-20 pt-10">
         <ContentGrid
-          title="Полезные материалы"
+          title="Все статьи"
           showPagination={true} 
           rows={3} 
           items={articlesData.map((article: any) => {
@@ -64,11 +64,12 @@ export default async function SeoBlogPage() {
                 key={article.id}
                 id={article.id}
                 image={article.image || "/images/blog-placeholder.png"}
+                imageAlt={article.seo?.imageAlt || article.title}
                 category={getSingleCategory(article)} 
                 date={rawDate} 
                 title={article.title}
                 excerpt={article.excerpt || article.description || "..."}
-                link={`/${article.slug}`} 
+                link={`/blog/${article.slug}`}
               />
             );
           })}

@@ -52,6 +52,9 @@ export interface SEOData {
   canonicalUrl: string;
   noIndex: boolean;
   schemaMarkup?: string;
+  imageAlt?: string;
+  imageTitle?: string;
+  imageDescription?: string;
 }
 
 export interface DoctorPrice {
