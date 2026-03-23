@@ -10,6 +10,7 @@ interface ArticleCardProps {
   title: string;
   excerpt: string;
   link: string;
+  imageAlt?: string;
 }
 
 export default function ArticleCard({

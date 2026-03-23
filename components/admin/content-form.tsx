@@ -79,6 +79,9 @@ export function ContentForm({
       ogImage: "",
       canonicalUrl: "",
       noIndex: false,
+      imageAlt: "",
+      imageTitle: "",
+      imageDescription: "",
     },
   );
 
@@ -259,8 +262,55 @@ export function ContentForm({
               </Select>
             </div>
 
-            <ImageUpload value={image} onChange={setImage} onUploadingChange={setImageUploading} folder="images" label="Обложка" description="Загрузите файл..." aspectRatio="16/9" />
+{/* Блок загрузки обложки и её метаданных */}
+          <div className="space-y-4 rounded-xl border bg-card p-4 shadow-sm">
+            <ImageUpload 
+              value={image} 
+              onChange={setImage} 
+              onUploadingChange={setImageUploading} 
+              folder="images" 
+              label="Обложка" 
+              description="Загрузите файл..." 
+              aspectRatio="16/9" 
+            />
 
+            {/* Показываем поля метаданных только если картинка загружена */}
+              <div className="space-y-3 pt-2 border-t mt-4">
+                <h4 className="text-sm font-medium leading-none">Метаданные обложки</h4>
+                
+                <div className="space-y-1.5">
+                  <Label htmlFor="imageAlt" className="text-xs text-muted-foreground">Alt</Label>
+                  <Input 
+                    id="imageAlt" 
+                    value={seo.imageAlt || ""} 
+                    onChange={(e) => setSeo({ ...seo, imageAlt: e.target.value })} 
+                    placeholder="Описание фото для SEO" 
+                    className="h-8 text-sm" 
+                  />
+                </div>
+                
+                <div className="space-y-1.5">
+                  <Label htmlFor="imageTitle" className="text-xs text-muted-foreground">Заголовок</Label>
+                  <Input 
+                    id="imageTitle" 
+                    value={seo.imageTitle || ""} 
+                    onChange={(e) => setSeo({ ...seo, imageTitle: e.target.value })} 
+                    className="h-8 text-sm" 
+                  />
+                </div>
+                
+                <div className="space-y-1.5">
+                  <Label htmlFor="imageDesc" className="text-xs text-muted-foreground">Описание (Description)</Label>
+                  <Textarea 
+                    id="imageDesc" 
+                    value={seo.imageDescription || ""} 
+                    onChange={(e) => setSeo({ ...seo, imageDescription: e.target.value })} 
+                    rows={2} 
+                    className="text-sm resize-none" 
+                  />
+                </div>
+              </div>
+          </div>
             <div className="space-y-2">
               <Label htmlFor="tags">Теги</Label>
               <Input id="tags" value={tagsInput} onChange={(e) => handleTagsChange(e.target.value)} placeholder="тег1, тег2, тег3" />

@@ -17,10 +17,20 @@ export async function generateMetadata({
 
   if (!article) return { title: "Статья не найдена" };
 
+  const imageUrl = article.image || "/images/blog-placeholder.png";
+  const imageAlt = article.seo?.imageAlt || article.title;
+
   return {
     title: article.seo?.metaTitle || article.title,
     description: article.seo?.metaDescription || article.excerpt,
-    openGraph: { images: article.image ? [article.image] : [] },
+    openGraph: {
+      images: [
+        {
+          url: imageUrl,
+          alt: imageAlt,
+        },
+      ],
+    },
   };
 }
 
@@ -75,15 +85,18 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
 
           {article.image && (
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-10 bg-gray-100 shadow-sm">
-              <Image
-                src={article.image}
-                alt={article.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
+            <figure className="mb-10">
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
+                <Image
+                  src={article.image}
+                  alt={article.seo?.imageAlt || article.title}
+                  title={article.seo?.imageTitle}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </figure>
           )}
 
           {article.content && (
@@ -92,7 +105,6 @@ export default async function BlogPostPage({ params }: PageProps) {
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
           )}
-
         </article>
       </main>
     </>
