@@ -1,24 +1,32 @@
 import React from "react";
 import Link from "next/link";
-import { getDashboardStats, getAdminContent, getTopDoctorsIds, updateTopDoctorsIds } from "@/lib/firestore/content";
+import { getDashboardStats, getAdminContent, getTopDoctorsIds, updateTopDoctorsIds, getCategories, saveCategories } from "@/lib/firestore/content";
 import { StatCard } from "@/components/admin/stat-card";
 import { FileText, Briefcase, Users } from "lucide-react";
-import { DoctorProfile } from "@/lib/firestore/types";
+import { DoctorProfile, DoctorCategory } from "@/lib/firestore/types";
 import { TopDoctorsManager } from "@/components/admin/top-doctors-manager";
+import { CategoriesManager } from "@/components/admin/categories-manager";
 
 export const metadata = { title: "Обзор | Админ-панель SEOMAN" };
 
 export default async function AdminDashboardPage() {
-  const [stats, doctorsRaw, topIdsRaw] = await Promise.all([
+  const [stats, doctorsRaw, topIdsRaw, initialCategories] = await Promise.all([
     getDashboardStats(),
     getAdminContent("doctors"),
-    getTopDoctorsIds() 
+    getTopDoctorsIds(),
+    getCategories()
   ]);
 
-const doctors = doctorsRaw as unknown as DoctorProfile[];
+  const doctors = doctorsRaw as unknown as DoctorProfile[];
+
   const saveTopDoctors = async (newIds: string[]) => {
     "use server";
     await updateTopDoctorsIds(newIds);
+  };
+
+  const handleSaveCategories = async (newCats: DoctorCategory[]) => {
+    "use server";
+    await saveCategories(newCats);
   };
 
   return (
@@ -32,6 +40,11 @@ const doctors = doctorsRaw as unknown as DoctorProfile[];
         allDoctors={doctors} 
         initialTopIds={topIdsRaw} 
         onSave={saveTopDoctors} 
+      />
+
+      <CategoriesManager 
+        initialCategories={initialCategories} 
+        onSave={handleSaveCategories} 
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

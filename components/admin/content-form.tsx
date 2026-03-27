@@ -262,7 +262,6 @@ export function ContentForm({
               </Select>
             </div>
 
-{/* Блок загрузки обложки и её метаданных */}
           <div className="space-y-4 rounded-xl border bg-card p-4 shadow-sm">
             <ImageUpload 
               value={image} 
@@ -274,7 +273,6 @@ export function ContentForm({
               aspectRatio="16/9" 
             />
 
-            {/* Показываем поля метаданных только если картинка загружена */}
               <div className="space-y-3 pt-2 border-t mt-4">
                 <h4 className="text-sm font-medium leading-none">Метаданные обложки</h4>
                 

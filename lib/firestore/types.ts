@@ -77,6 +77,7 @@ export interface DoctorProfile {
   specialty: LocalizedText;
   shortDescription?: LocalizedText;
   experienceYears: number;
+  categoryId?: string;
   
   reasons: LocalizedText[]; 
   services: LocalizedText[];
@@ -90,6 +91,13 @@ export interface DoctorProfile {
   prices: DoctorPrice[];
   faq: DoctorFAQ[];
   location: DoctorLocation;
+}
+
+export interface DoctorCategory {
+  id: string;
+  title: LocalizedText;
+  description?: LocalizedText;
+  basePrice?: number;
 }
 
 export interface Content {

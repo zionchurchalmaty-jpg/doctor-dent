@@ -1,7 +1,7 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { Star, Clock, MapPin, ArrowRight } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import Image from "next/image";
+import Link from "next/link";
+import { Star, Clock, MapPin, ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export interface DoctorCardProps {
   id: string;
@@ -14,13 +14,14 @@ export interface DoctorCardProps {
   reviewsCount?: number;
   experienceYears?: number;
   location?: string;
-  shortDescription?: string | null; 
+  shortDescription?: string | null;
   quote?: {
     text: string;
     author: string;
   } | null;
   price: number;
-  lang?: 'ru' | 'kz';
+  pricePrefix?: string;
+  lang?: "ru" | "kz";
 }
 
 export default function DoctorCard({
@@ -37,19 +38,21 @@ export default function DoctorCard({
   shortDescription,
   quote,
   price,
-  lang = 'ru',
+  pricePrefix,
+  lang = "ru",
 }: DoctorCardProps) {
-  
-  const t = useTranslations('HomePage.TopDoctors.DoctorCard');
-  
-  const formattedPrice = new Intl.NumberFormat(lang === 'kz' ? 'kk-KZ' : 'ru-RU')
+  const t = useTranslations("HomePage.TopDoctors.DoctorCard");
+
+  const formattedPrice = new Intl.NumberFormat(
+    lang === "kz" ? "kk-KZ" : "ru-RU",
+  )
     .format(price)
-    .replace(/,/g, ' ');
+    .replace(/,/g, " ");
 
   return (
-    <div 
+    <div
       className={`relative flex flex-col bg-white rounded-[24px] shadow-sm transition-all hover:shadow-md h-full ${
-        isTop ? 'border-2 border-[#F5A623]' : 'border border-gray-100'
+        isTop ? "border-2 border-[#F5A623]" : "border border-gray-100"
       }`}
     >
       {isTop && topRank && (
@@ -58,35 +61,43 @@ export default function DoctorCard({
         </div>
       )}
       <div className="relative h-56 w-full shrink-0 bg-gray-100 rounded-t-[22px] overflow-hidden">
-        <Image 
-          src={image || "/images/placeholder.png"} 
-          alt={name || "Doctor"} 
-          fill 
-          className="object-cover" 
+        <Image
+          src={image || "/images/placeholder.png"}
+          alt={name || "Doctor"}
+          fill
+          className="object-cover"
         />
       </div>
 
       <div className="flex flex-col flex-grow p-6">
         <div className="mb-4">
-          <h3 className="text-[18px] font-bold text-gray-900 leading-snug mb-1">{name}</h3>
+          <h3 className="text-[18px] font-bold text-gray-900 leading-snug mb-1">
+            {name}
+          </h3>
           <p className="text-sm text-gray-500">{specialty}</p>
         </div>
         <div className="flex items-center gap-3 mb-4">
           {rating !== undefined && (
             <div className="flex items-center gap-1.5 bg-[#FFF9EB] px-2.5 py-1 rounded-lg">
               <Star className="w-4 h-4 fill-[#F5A623] text-[#F5A623]" />
-              <span className="text-sm font-bold text-gray-900">{rating.toFixed(1)}</span>
+              <span className="text-sm font-bold text-gray-900">
+                {rating.toFixed(1)}
+              </span>
             </div>
           )}
           {reviewsCount !== undefined && (
-            <span className="text-sm text-gray-500">{reviewsCount} {t('reviews')}</span>
+            <span className="text-sm text-gray-500">
+              {reviewsCount} {t("reviews")}
+            </span>
           )}
         </div>
         <div className="flex items-center gap-5 mb-5 text-sm text-gray-500">
           {experienceYears !== undefined && (
             <div className="flex items-center gap-1.5">
               <Clock className="w-4 h-4 text-gray-400" />
-              <span>{t('experience')} {experienceYears} {t('years')}</span>
+              <span>
+                {t("experience")} {experienceYears} {t("years")}
+              </span>
             </div>
           )}
           {location && (
@@ -113,17 +124,22 @@ export default function DoctorCard({
         )}
         <div className="flex items-end justify-between mt-auto pt-4 border-t border-gray-50">
           <div>
-            <p className="text-xs text-gray-400 mb-1">{t('price')}</p>
+            <p className="text-xs text-gray-400 mb-1">{t("price")}</p>
             <p className="text-[20px] font-bold text-gray-900 leading-none whitespace-nowrap">
+              {pricePrefix && (
+                <span className="text-sm font-normal text-gray-500 mr-1">
+                  {pricePrefix}
+                </span>
+              )}
               {formattedPrice} ₸
             </p>
           </div>
-          
-          <Link 
-            href={`/${lang}/doctors/${id}`} 
+
+          <Link
+            href={`/${lang}/doctors/${id}`}
             className="text-[#2563EB] font-medium text-sm flex items-center gap-1 hover:text-blue-700 transition-colors"
           >
-            {t('more')} <ArrowRight className="w-4 h-4" />
+            {t("more")} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>

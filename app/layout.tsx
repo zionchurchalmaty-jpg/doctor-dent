@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import { Inter } from 'next/font/google';
-import Script from 'next/script'; // 1. Обязательно импортируем Script
+import Script from 'next/script';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 

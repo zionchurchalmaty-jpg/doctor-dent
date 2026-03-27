@@ -7,6 +7,7 @@ import {
   getTopDoctorsIds,
   getContentById,
   getPublishedContent,
+  getCategories,
 } from "@/lib/firestore/content";
 import { DoctorProfile } from "@/lib/firestore/types";
 import Hero from "@/components/Hero";
@@ -22,7 +23,16 @@ export default async function HomePage({
   const lang = locale === "kz" ? "kz" : "ru";
 
   const t = await getTranslations("HomePage");
-  const topIds = await getTopDoctorsIds();
+
+  const [topIds, promosData, categories, allDoctorsData] = await Promise.all([
+    getTopDoctorsIds(),
+    getPublishedContent("promos", 3),
+    getCategories(),
+    getPublishedContent("doctors"),
+  ]);
+
+  const allDoctors = allDoctorsData as unknown as DoctorProfile[];
+
   const topDoctorsPromises = topIds
     .filter((id) => id !== "")
     .map((id) => getContentById(id, "doctors"));
@@ -32,7 +42,22 @@ export default async function HomePage({
     (doc) => doc !== null,
   ) as unknown as DoctorProfile[];
   const heroDoctor = topDoctors.length > 0 ? topDoctors[0] : null;
-  const promosData = await getPublishedContent("promos", 3);
+
+  const categoriesWithDoctors = categories.map((cat) => {
+    const docs = allDoctors.filter((doc) => doc.categoryId === cat.id);
+
+    docs.sort((a, b) => {
+      const ratingA = a.reviews?.length
+        ? a.reviews.reduce((acc, r) => acc + r.rating, 0) / a.reviews.length
+        : 5.0;
+      const ratingB = b.reviews?.length
+        ? b.reviews.reduce((acc, r) => acc + r.rating, 0) / b.reviews.length
+        : 5.0;
+      return ratingB - ratingA;
+    });
+
+    return { ...cat, doctors: docs };
+  });
 
   return (
     <div className="min-h-screen">
@@ -50,7 +75,6 @@ export default async function HomePage({
               reviewsCount > 0
                 ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviewsCount
                 : 5.0;
-
             const reviewSnippet =
               reviewsCount > 0
                 ? {
@@ -58,18 +82,23 @@ export default async function HomePage({
                     author: reviews[0].authorName[lang],
                   }
                 : null;
-                const fullAddress = doctor.location?.address?.[lang];
+            const fullAddress = doctor.location?.address?.[lang];
             const shortLocation = fullAddress
               ? fullAddress.split(",")[0]
               : "Город не указан";
 
+            const lowestPrice = doctor.prices?.length
+              ? Math.min(...doctor.prices.map((p) => p.price))
+              : 0;
+
             return (
-              <div key={doctor.id} className="pt-4 pl-4">
+              <div key={doctor.id} className="pt-4 pl-4 h-full">
                 <DoctorCard
                   id={doctor.slug || doctor.id}
                   name={doctor.name?.[lang]}
                   specialty={doctor.specialty?.[lang]}
-                  price={doctor.prices?.[0]?.price || 0}
+                  price={lowestPrice}
+                  pricePrefix={lang === "kz" ? "бастап" : "от"}
                   image={doctor.photo}
                   location={shortLocation}
                   experienceYears={doctor.experienceYears}
@@ -100,7 +129,7 @@ export default async function HomePage({
         />
 
         {promosData && promosData.length > 0 && (
-          <section className="bg-[#FFF7ED] py-12 md:py-20 w-full mt-10">
+          <section className="bg-[#FFF7ED] py-12 md:py-20 w-full mt-16">
             <ContentGrid
               title="Акции и спецпредложения"
               icon={<Tags className="w-8 h-8 text-[#FF5A00]" />}
@@ -146,6 +175,90 @@ export default async function HomePage({
             />
           </section>
         )}
+
+        {categoriesWithDoctors.map((category) => {
+          if (category.doctors.length === 0) return null;
+
+          const formattedPrice = category.basePrice
+            ? new Intl.NumberFormat(lang === "kz" ? "kk-KZ" : "ru-RU")
+                .format(category.basePrice)
+                .replace(/,/g, " ")
+            : null;
+
+          const categorySubtitle = (
+            <div className="space-y-4">
+              <p>{category.description?.[lang]}</p>
+              {formattedPrice && (
+                <Link
+                  href={`/${locale}/services`}
+                  className="inline-block text-[#1A73E8] font-medium hover:text-blue-800 transition-colors text-sm"
+                >
+                  {lang === "kz"
+                    ? `Шамамен құны: ${formattedPrice} ₸ бастап`
+                    : `Примерная стоимость: от ${formattedPrice} ₸`}
+                </Link>
+              )}
+            </div>
+          );
+
+          return (
+            <div key={category.id} className="mt-16">
+              <ContentGrid
+                title={category.title[lang]}
+                subtitle={categorySubtitle}
+                items={category.doctors.map((doctor) => {
+                  const reviews = doctor.reviews || [];
+                  const reviewsCount = reviews.length;
+                  const avgRating =
+                    reviewsCount > 0
+                      ? reviews.reduce((acc, r) => acc + r.rating, 0) /
+                        reviewsCount
+                      : 5.0;
+                  const reviewSnippet =
+                    reviewsCount > 0
+                      ? {
+                          text: reviews[0].text[lang],
+                          author: reviews[0].authorName[lang],
+                        }
+                      : null;
+                  const fullAddress = doctor.location?.address?.[lang];
+                  const shortLocation = fullAddress
+                    ? fullAddress.split(",")[0]
+                    : "Город не указан";
+
+                  const lowestPrice = doctor.prices?.length
+                    ? Math.min(...doctor.prices.map((p) => p.price))
+                    : 0;
+
+                  return (
+                    <div key={doctor.id} className="pt-4 pl-4 h-full">
+                      <DoctorCard
+                        id={doctor.slug || doctor.id}
+                        name={doctor.name?.[lang]}
+                        specialty={doctor.specialty?.[lang]}
+                        price={lowestPrice}
+                        pricePrefix={lang === "kz" ? "бастап" : "от"}
+                        image={doctor.photo}
+                        location={shortLocation}
+                        experienceYears={doctor.experienceYears}
+                        rating={avgRating}
+                        reviewsCount={reviewsCount}
+                        shortDescription={
+                          doctor.shortDescription?.[lang] ||
+                          doctor.reasons?.[0]?.[lang]
+                        }
+                        quote={reviewSnippet}
+                        lang={lang as "ru" | "kz"}
+                      />
+                    </div>
+                  );
+                })}
+                rows={1}
+                showPagination={false}
+              />
+            </div>
+          );
+        })}
       </main>
     </div>
   );
