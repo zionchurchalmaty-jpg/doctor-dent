@@ -5,7 +5,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getCountFromServer } from "firebase/firestore";
-import type { ContentInput, ContentType, Content } from "./types";
+import type { ContentInput, ContentType, Content, DoctorCategory, DoctorProfile } from "./types";
 import slugify from "slugify";
 
 const COLLECTION_MAP: Record<ContentType, string> = {
