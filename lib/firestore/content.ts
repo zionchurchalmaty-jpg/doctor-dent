@@ -291,3 +291,46 @@ export async function getMainDoctorId(): Promise<string | null> {
   const snap = await getDoc(doc(db, "settings", "general"));
   return snap.exists() ? snap.data()?.mainDoctorId : null;
 }
+
+export async function getCategories(): Promise<DoctorCategory[]> {
+  const adminDb = await getAdminDb();
+  if (adminDb) {
+    const snap = await adminDb.collection("settings").doc("categories").get();
+    return snap.data()?.items || [];
+  }
+  const snap = await getDoc(doc(db, "settings", "categories"));
+  return snap.exists() ? (snap.data()?.items || []) : [];
+}
+
+export async function saveCategories(categories: DoctorCategory[]): Promise<void> {
+  const adminDb = await getAdminDb();
+  if (adminDb) {
+    await adminDb.collection("settings").doc("categories").set({ items: categories }, { merge: true });
+    return;
+  }
+  const ref = doc(db, "settings", "categories");
+  await setDoc(ref, { items: categories }, { merge: true });
+}
+
+export async function getDoctorsByCategory(categoryId: string): Promise<DoctorProfile[]> {
+  const adminDb = await getAdminDb();
+  let rawData;
+
+  if (adminDb) {
+    const snapshot = await adminDb.collection("doctors")
+      .where("status", "==", "published")
+      .where("categoryId", "==", categoryId)
+      .get();
+    rawData = snapshot.docs.map(d => ({ id: d.id, contentType: "doctors", ...d.data() }));
+  } else {
+    const q = query(
+      collection(db, "doctors"), 
+      where("status", "==", "published"),
+      where("categoryId", "==", categoryId)
+    );
+    const snapshot = await getDocs(q);
+    rawData = snapshot.docs.map(d => ({ id: d.id, contentType: "doctors", ...d.data() }));
+  }
+
+  return serializeFirebaseData(rawData) as DoctorProfile[];
+}

@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ContentGridProps {
   title?: React.ReactNode;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   icon?: React.ReactNode;
   items: React.ReactNode[];
   rows?: number;
@@ -40,8 +40,7 @@ export function ContentGrid({
             {icon && <div className="text-yellow-400">{icon}</div>}
             <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
           </div>
-          {subtitle && <p className="text-gray-500 mt-2 text-sm">{subtitle}</p>}
-        </div>
+{subtitle && <div className="text-gray-500 mt-2 text-sm">{subtitle}</div>}        </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
