@@ -206,7 +206,7 @@ export default async function HomePage({
               <ContentGrid
                 title={category.title[lang]}
                 subtitle={categorySubtitle}
-                items={category.doctors.map((doctor) => {
+                items={category.doctors.map((doctor: DoctorProfile) => {
                   const reviews = doctor.reviews || [];
                   const reviewsCount = reviews.length;
                   const avgRating =
