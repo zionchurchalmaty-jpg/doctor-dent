@@ -120,6 +120,8 @@ export interface Content {
   password?: string;
   previewContent?: string;
   isSeo?: boolean;
+  doctorId?: string;
+  doctorSlug?: string;
 }
 
 export interface ContentInput extends Partial<Content> {
@@ -127,6 +129,8 @@ export interface ContentInput extends Partial<Content> {
   title: string;
   status: ContentStatus;
   isSeo?: boolean;
+  doctorId?: string;
+  doctorSlug?: string;
 }
 
 export interface SerializedContent extends Omit<

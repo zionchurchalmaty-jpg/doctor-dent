@@ -131,20 +131,24 @@ export default async function HomePage({
         {promosData && promosData.length > 0 && (
           <section className="bg-[#FFF7ED] py-12 md:py-20 w-full mt-16">
             <ContentGrid
-              title="Акции и спецпредложения"
+              title={t("Promos.title")}
               icon={<Tags className="w-8 h-8 text-[#FF5A00]" />}
               items={promosData.map((promo: any) => (
-                <PromoCard
-                  key={promo.id}
-                  image={promo.image}
-                  badge={promo.badge}
-                  title={promo.title}
-                  description={promo.description}
-                  newPrice={promo.newPrice}
-                  oldPrice={promo.oldPrice}
-                  buttonText={promo.buttonText || "Записаться"}
-                  link={`/${locale}/promos/${promo.id}`}
-                />
+<PromoCard
+    key={promo.id}
+    image={promo.image}
+    badge={promo.badge}
+    title={promo.title}
+    description={promo.description}
+    newPrice={promo.newPrice}
+    oldPrice={promo.oldPrice}
+    buttonText={promo.buttonText || "Записаться"}
+    link={
+      promo.doctorSlug 
+        ? `/${locale}/doctors/${promo.doctorSlug}`
+        : `/${locale}/promos/${promo.id}`
+    }
+  />
               ))}
               rows={1}
               showPagination={false}
@@ -156,11 +160,9 @@ export default async function HomePage({
                     </div>
                     <div>
                       <h4 className="text-base font-bold text-gray-900">
-                        Хотите разместить свою акцию?
-                      </h4>
+{t("Promos.cardTitle")}                      </h4>
                       <p className="text-sm text-gray-500 mt-0.5">
-                        Привлекайте больше пациентов с блоком спецпредложений
-                      </p>
+{t("Promos.cardText")}                      </p>
                     </div>
                   </div>
 
@@ -168,7 +170,7 @@ export default async function HomePage({
                     href={`/${locale}/business/ads`}
                     className="w-full md:w-auto px-6 py-3 bg-[#FF5A00] hover:bg-[#E04D00] transition-colors text-white font-semibold rounded-xl text-sm whitespace-nowrap text-center"
                   >
-                    Подключить услугу
+{t("Promos.buttonText")} 
                   </Link>
                 </div>
               }
@@ -253,13 +255,31 @@ export default async function HomePage({
                     </div>
                   );
                 })}
-                rows={1}
-                showPagination={false}
+                rows={2}
+                showPagination={true}
               />
             </div>
           );
         })}
-      </main>
+              </main>
+
+        <section className="bg-[#2563EB] w-full py-16 mt-20 flex flex-col items-center justify-center text-center px-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-5 tracking-wide">
+            {lang === "kz" ? "Сіз тіс дәрігерісіз бе?" : "Вы стоматолог?"}
+          </h2>
+          <p className="text-white/90 text-base md:text-lg mb-8 max-w-2xl tracking-wide font-light">
+            {lang === "kz"
+              ? "DentDoctor.kz сайтында өз парақшаңызды орналастырыңыз және пациенттерді тікелей қабылдаңыз"
+              : "Разместите свою страницу на DentDoctor.kz и получайте пациентов напрямую"}
+          </p>
+          <Link
+            href={`/${locale}/for-doctors`} 
+            className="bg-white text-[#2563EB] hover:bg-blue-50 transition-colors px-8 py-3 rounded-xl font-medium text-sm md:text-base shadow-sm"
+          >
+            {lang === "kz" ? "Толығырақ білу" : "Узнать подробнее"}
+          </Link>
+        </section>
     </div>
   );
 }
+

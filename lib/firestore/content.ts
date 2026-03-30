@@ -1,7 +1,7 @@
 import {
   collection, doc, addDoc, updateDoc, deleteDoc, getDoc, getDocs,
   query, where, orderBy, limit, Timestamp,
-  setDoc
+  setDoc, writeBatch
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getCountFromServer } from "firebase/firestore";
@@ -333,4 +333,45 @@ export async function getDoctorsByCategory(categoryId: string): Promise<DoctorPr
   }
 
   return serializeFirebaseData(rawData) as DoctorProfile[];
+}
+
+export async function syncDoctorCases(doctorId: string, doctorName: any, formCases: any[]) {
+  const casesRef = collection(db, "cases");
+  const batch = writeBatch(db);
+
+  const q = query(casesRef, where("doctorId", "==", doctorId));
+  const snapshot = await getDocs(q);
+  const existingCasesIds = snapshot.docs.map(d => d.id);
+
+  const formCasesIds: string[] = [];
+
+  for (const caseItem of formCases) {
+    const caseData = {
+      ...caseItem,
+      doctorId,
+      doctorName: doctorName || { ru: "", kz: "" },
+      contentType: "cases",
+      status: "published",
+      updatedAt: Timestamp.now(),
+      date: Timestamp.now(),
+    };
+
+    if (caseItem.id) {
+      formCasesIds.push(caseItem.id);
+      const docRef = doc(db, "cases", caseItem.id);
+      batch.update(docRef, caseData);
+    } else {
+      const { id, ...dataWithoutId } = caseData;
+      const newDocRef = doc(collection(db, "cases"));
+      batch.set(newDocRef, { ...dataWithoutId, createdAt: Timestamp.now() });
+      formCasesIds.push(newDocRef.id);
+    }
+  }
+
+  const casesToDelete = existingCasesIds.filter(id => !formCasesIds.includes(id));
+  for (const idToDelete of casesToDelete) {
+    batch.delete(doc(db, "cases", idToDelete));
+  }
+
+  await batch.commit();
 }

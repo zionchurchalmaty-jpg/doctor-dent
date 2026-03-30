@@ -2,8 +2,9 @@
 
 import { useTranslations, useLocale } from "next-intl";
 import { DoctorProfile } from "@/lib/firestore/types";
-import { Star } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function DoctorShowcase({ doctor }: { doctor: DoctorProfile }) {
   const t = useTranslations("DoctorProfile");
@@ -20,17 +21,20 @@ export function DoctorShowcase({ doctor }: { doctor: DoctorProfile }) {
         
         {doctor.cases && doctor.cases.length > 0 && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">{t("casesTitle")}</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">{t("casesTitle")}</h2>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {doctor.cases.map((c, idx) => (
                 <div key={idx} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
                   <div className="flex w-full h-48 relative">
                     <div className="w-1/2 relative border-r border-white/20">
-                      <Image src={c.beforeImage} alt="Before" fill className="object-cover" />
+                      <Image src={c.beforeImage || "/images/placeholder.png"} alt="Before" fill className="object-cover" />
                       <span className="absolute top-2 left-2 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">До</span>
                     </div>
                     <div className="w-1/2 relative">
-                      <Image src={c.afterImage} alt="After" fill className="object-cover" />
+                      <Image src={c.afterImage || "/images/placeholder.png"} alt="After" fill className="object-cover" />
                       <span className="absolute top-2 right-2 bg-[#10B981] text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">После</span>
                     </div>
                   </div>
@@ -51,6 +55,17 @@ export function DoctorShowcase({ doctor }: { doctor: DoctorProfile }) {
                 </div>
               ))}
             </div>
+
+            <div className="flex justify-center mt-8">
+              <Link
+                href={`/${locale}/cases?doctor=${doctor.id}`}
+                className="inline-flex items-center justify-center px-6 py-3 font-semibold rounded-xl text-[#2563EB] bg-blue-50 hover:bg-blue-100 transition-colors"
+              >
+                Посмотреть все кейсы врача
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </div>
+
           </div>
         )}
 

@@ -6,20 +6,13 @@ import { useForm, FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
-  Save,
-  Loader2,
-  User,
-  ListChecks,
-  Info,
-  Award,
-  Image as ImageIcon,
-  MessageSquare,
-  DollarSign,
-  CircleQuestionMark,
+  Save, Loader2, User, ListChecks, Info, Award,
+  Image as ImageIcon, MessageSquare, DollarSign, CircleQuestionMark,
 } from "lucide-react";
 
 import { useAuth } from "./auth-provider";
-import { createContent, updateContent } from "@/lib/firestore/content";
+
+import { createContent, updateContent, syncDoctorCases } from "@/lib/firestore/content";
 
 import { DoctorBasicTab } from "./doctor-tabs/basic-tab";
 import { DoctorBenefitsTab } from "./doctor-tabs/benefits-tab";
@@ -58,16 +51,23 @@ export function DoctorForm({ initialData, isEditing = false }: any) {
 
   const onSubmit = async (data: any) => {
     if (!user) {
-      alert("Ошибка: Вы не авторизованы!");
-      return;
+      alert("Ошибка: Вы не авторизованы. Пожалуйста, войдите в систему.");
+      return; 
     }
 
     setSaving(true);
     try {
-      if (isEditing && initialData?.id) {
-        await updateContent(initialData.id, data);
+      const { cases, ...doctorData } = data;
+      let doctorId = initialData?.id;
+
+      if (isEditing && doctorId) {
+        await updateContent(doctorId, doctorData);
       } else {
-        await createContent(data, user.uid, user.email || "Admin");
+        doctorId = await createContent(doctorData, user.uid, user.email || "Admin");
+      }
+
+      if (doctorId) {
+        await syncDoctorCases(doctorId, doctorData.name, cases || []);
       }
 
       router.push("/admin/doctors");

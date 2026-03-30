@@ -8,7 +8,13 @@ import {
   Clock, 
   MapPin, 
   Calendar, 
-  Phone 
+  Phone,
+  Target,
+  TrendingUp,
+  Users,
+  Mail,
+  Check,
+  ShieldCheck
 } from "lucide-react";
 import Image from "next/image";
 import { DoctorProfile } from "@/lib/firestore/types";
@@ -16,12 +22,17 @@ import SearchWidget from "./SearchWidget";
 import { Button } from "@/components/ui/button";
 
 interface HeroProps {
-  variant?: "home" | "blog" | "doctor";
+  variant?: "home" | "blog" | "doctor" | "cases" | "rent" | "about";
   topDoctor?: DoctorProfile | null;
   doctor?: DoctorProfile;
   title?: string;
   subtitle?: string;
   tags?: string[];
+  stats?: {
+    cases?: number | string;
+    doctors?: number | string;
+    successRate?: string;
+  };
 }
 
 export default function Hero({
@@ -31,6 +42,7 @@ export default function Hero({
   title,
   subtitle,
   tags = [],
+  stats = { cases: 12, doctors: 38, successRate: "98%" }
 }: HeroProps) {
   const tHome = useTranslations("HomePage.Hero");
   const tDoc = useTranslations("DoctorProfile");
@@ -42,6 +54,87 @@ export default function Hero({
     return textField[locale] || textField["ru"] || null;
   };
 
+  if (variant === "rent") {
+    return (
+      <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+          <div className="flex flex-col gap-6 text-white relative z-10">
+            <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
+              {title || "Арендуйте персональную страницу на DentDoctor.kz"}
+            </h1>
+            <p className="text-blue-100 text-lg md:text-xl max-w-lg opacity-90">
+              {subtitle || "Получайте пациентов напрямую через SEO-продвижение вашей страницы"}
+            </p>
+
+            <ul className="space-y-5 mt-4">
+              <li className="flex items-center gap-4">
+                <div className="bg-[#10B981] rounded-full p-2 shrink-0">
+                  <Target className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-base md:text-lg font-medium">Прямые заявки от пациентов</span>
+              </li>
+              <li className="flex items-center gap-4">
+                <div className="bg-[#10B981] rounded-full p-2 shrink-0">
+                  <TrendingUp className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-base md:text-lg font-medium">SEO-продвижение вашей страницы</span>
+              </li>
+              <li className="flex items-center gap-4">
+                <div className="bg-[#10B981] rounded-full p-2 shrink-0">
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-base md:text-lg font-medium">Только целевая аудитория</span>
+              </li>
+            </ul>
+
+            <div className="flex flex-wrap gap-4 mt-6">
+              <Button className="bg-white text-[#1d4ed8] hover:bg-gray-100 rounded-xl px-8 h-12 text-base font-bold shadow-lg">
+                Позвонить нам
+              </Button>
+              <Button className="bg-[#3b82f6] text-white hover:bg-[#2563eb] rounded-xl px-8 h-12 text-base font-bold shadow-lg border border-blue-400/30">
+                Написать email
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex justify-center lg:justify-end w-full relative z-10">
+            <div className="w-full max-w-[500px] bg-white rounded-[32px] overflow-hidden shadow-2xl">
+              <div className="relative w-full h-[240px] md:h-[280px]">
+                <Image
+                  src="/images/dentist-working.jpg"
+                  alt="Стоматолог за работой"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              
+              <div className="p-8 md:p-10 bg-white">
+                <h3 className="text-gray-900 font-bold text-xl mb-6">Преимущества платформы</h3>
+                
+                <ul className="space-y-3">
+                  {[
+                    "Быстрая окупаемость инвестиций",
+                    "Гибкие тарифы под ваш бюджет",
+                    "Полная техническая поддержка",
+                    "Портал на русском и казахском языках",
+                    "Продвижение на двух языках — больше аудитории"
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-[#10B981] shrink-0 mt-0.5" />
+                      <span className="text-sm md:text-[15px] text-gray-700 font-medium leading-tight">
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
   if (variant === "doctor" && doctor) {
     const fullAddress = getLocalizedText(doctor.location?.address);
     const shortLocation = fullAddress ? fullAddress.split(",")[0] : null;
@@ -105,7 +198,159 @@ export default function Hero({
               </Button>
             </div>
           </div>
+        </div>
+      </section>
+    );
+  }
 
+  if (variant === "about") {
+    return (
+      <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+          <div className="flex flex-col gap-6 text-white relative z-10">
+            <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
+              {title || "О проекте DentDoctor.kz"}
+            </h1>
+            <p className="text-blue-100 text-lg md:text-xl max-w-lg opacity-90 leading-relaxed">
+              {subtitle || "Платформа для поиска стоматологов с полными профилями, кейсами и отзывами"}
+            </p>
+
+            <ul className="space-y-5 mt-4">
+              <li className="flex items-center gap-4">
+                <div className="bg-[#10B981] rounded-full p-2 shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-base md:text-lg font-medium">Полные профили с кейсами и лицензиями</span>
+              </li>
+              <li className="flex items-center gap-4">
+                <div className="bg-[#10B981] rounded-full p-2 shrink-0">
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-base md:text-lg font-medium">Удобный поиск по направлениям</span>
+              </li>
+              <li className="flex items-center gap-4">
+                <div className="bg-[#10B981] rounded-full p-2 shrink-0">
+                  <ShieldCheck className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-base md:text-lg font-medium">Реальные отзывы пациентов</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="flex justify-center lg:justify-end w-full relative z-10">
+            <div className="w-full max-w-[500px] bg-white rounded-[32px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-blue-900/40 hover:-translate-y-1">
+              <div className="relative w-full h-[220px] md:h-[260px]">
+                <Image
+                  src="/images/team.jpg"
+                  alt="Команда DentDoctor"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              
+              <div className="p-8 md:p-10 bg-white">
+                <h3 className="text-gray-900 font-bold text-xl mb-8">DentDoctor в цифрах</h3>
+                
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">36</span>
+                    <span className="text-xs md:text-sm text-gray-500 font-medium">Врачей</span>
+                  </div>
+                  <div className="flex flex-col gap-1 border-x border-gray-100">
+                    <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">5+</span>
+                    <span className="text-xs md:text-sm text-gray-500 font-medium">Городов</span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">100%</span>
+                    <span className="text-xs md:text-sm text-gray-500 font-medium">Качество</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (variant === "cases") {
+    const caseFeatures = [
+      "Реальные фото до и после",
+      "Подробное описание проблемы и решения",
+      "Прозрачные цены и сроки лечения",
+    ];
+
+    return (
+      <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="flex flex-col gap-6 text-white relative z-10">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              {title || "Кейсы врачей"}
+            </h1>
+            <p className="text-blue-100 text-lg md:text-xl max-w-lg leading-relaxed opacity-90">
+              {subtitle || "Реальные результаты лечения наших специалистов. Фото до и после, описание процедур и стоимость."}
+            </p>
+
+            <ul className="space-y-4 mt-4">
+              {caseFeatures.map((text, idx) => (
+                <li key={idx} className="flex items-center gap-4">
+                  <div className="bg-[#10B981] rounded-full p-1 shrink-0">
+                    <CheckCircle2 className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-base md:text-lg font-medium text-white/95">
+                    {text}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex justify-center lg:justify-end w-full relative z-10">
+            <div className="w-full max-w-[520px] bg-white rounded-[32px] overflow-hidden shadow-2xl">
+              <div className="relative w-full h-[240px] md:h-[300px]">
+                <Image
+                  src="/images/dental-office.jpg" 
+                  alt="Стоматологический кабинет"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              
+              <div className="p-8 md:p-10">
+                <h3 className="text-gray-900 font-bold text-xl mb-8">База кейсов</h3>
+                
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="flex flex-col">
+                    <span className="text-2xl md:text-3xl font-extrabold text-[#2563EB]">
+                      {stats.cases}
+                    </span>
+                    <span className="text-xs md:text-sm text-gray-500 font-medium mt-1 uppercase tracking-wider">
+                      Кейсов
+                    </span>
+                  </div>
+                  
+                  <div className="flex flex-col border-x border-gray-100 px-4">
+                    <span className="text-2xl md:text-3xl font-extrabold text-[#2563EB]">
+                      {stats.doctors}
+                    </span>
+                    <span className="text-xs md:text-sm text-gray-500 font-medium mt-1 uppercase tracking-wider">
+                      Врачей
+                    </span>
+                  </div>
+                  
+                  <div className="flex flex-col items-end">
+                    <span className="text-2xl md:text-3xl font-extrabold text-[#2563EB]">
+                      {stats.successRate}
+                    </span>
+                    <span className="text-xs md:text-sm text-gray-500 font-medium mt-1 uppercase tracking-wider">
+                      Успеха
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     );

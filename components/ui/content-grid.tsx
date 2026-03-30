@@ -58,7 +58,7 @@ export function ContentGrid({
           </button>
 
           <span className="text-sm font-medium text-gray-700 px-4">
-            Страница {currentPage} из {totalPages}
+            {currentPage} / {totalPages}
           </span>
 
           <button
