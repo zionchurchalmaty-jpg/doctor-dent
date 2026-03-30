@@ -28,7 +28,6 @@ export default function Navbar() {
         <Link href={`/${locale}`} className="hover:text-blue-600 transition-colors">{t('home')}</Link>
         <Link href={`/cases`} className="hover:text-blue-600 transition-colors">{t('cases')}</Link>
         <Link href={`/blog`} className="hover:text-blue-600 transition-colors">{t('blog')}</Link>
-        <Link href={`/${locale}/rent`} className="hover:text-blue-600 transition-colors">{t('rent')}</Link>
         <Link href={`/${locale}/about`} className="hover:text-blue-600 transition-colors">{t('about')}</Link>
       </nav>
 
@@ -36,9 +35,11 @@ export default function Navbar() {
         
         <LanguageSwitcher />
 
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-5">
-          {t('forDoctors')}
-        </Button>
+<Button asChild className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-5">
+  <Link href={`/${locale}/for-doctors`}>
+    {t('forDoctors')}
+  </Link>
+</Button>
 
         <div className="flex items-center gap-2">
           <Phone className="w-5 h-5 text-blue-600" />

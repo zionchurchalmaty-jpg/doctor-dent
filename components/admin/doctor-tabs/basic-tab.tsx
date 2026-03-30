@@ -106,7 +106,7 @@ export function DoctorBasicTab() {
                 <Input value={watch("specialty.kz") || ""} readOnly className="bg-gray-100" />
               </div>
             </div>
-            <p className="text-xs text-gray-500 italic mt-1">Тексты специализации заполняются автоматически при выборе категории.</p>
+            <p className="text-xs text-gray-500 italic mt-1">Добавить категорию можно на главной странице админ панели</p>
           </div>
 
           <div>

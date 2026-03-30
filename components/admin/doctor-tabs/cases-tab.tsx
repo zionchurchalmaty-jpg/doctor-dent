@@ -24,6 +24,7 @@ export function DoctorCasesTab() {
           type="button" 
           variant="outline" 
           onClick={() => append({ 
+            id: "",
             title: { ru: "", kz: "" },
             duration: { ru: "", kz: "" },
             price: "",
@@ -40,6 +41,8 @@ export function DoctorCasesTab() {
         {fields.map((field, index) => (
           <div key={field.id} className="p-6 bg-gray-50 rounded-xl border border-gray-200 relative">
             
+            <input type="hidden" {...register(`cases.${index}.id`)} />
+
             <Button 
               type="button" 
               variant="destructive" 

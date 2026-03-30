@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Save, Loader2, UploadCloud, X } from "lucide-react";
 import { useAuth } from "./auth-provider";
-import { createContent, updateContent } from "@/lib/firestore/content";
+import { createContent, updateContent, getPublishedContent } from "@/lib/firestore/content";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -17,8 +17,21 @@ import { storage } from "@/lib/firebase";
 export function PromoForm({ initialData, isEditing = false }: any) {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [doctors, setDoctors] = useState<any[]>([]);
   const router = useRouter();
   const { user } = useAuth();
+
+  useEffect(() => {
+    async function fetchDoctors() {
+      try {
+        const docs = await getPublishedContent("doctors");
+        setDoctors(docs);
+      } catch (error) {
+        console.error("Ошибка при загрузке врачей:", error);
+      }
+    }
+    fetchDoctors();
+  }, []);
 
   const methods = useForm({
     defaultValues: initialData || {
@@ -31,6 +44,8 @@ export function PromoForm({ initialData, isEditing = false }: any) {
       newPrice: "",
       oldPrice: "",
       buttonText: "Записаться",
+      doctorId: "",
+      doctorSlug: "",
     },
   });
 
@@ -148,7 +163,29 @@ export function PromoForm({ initialData, isEditing = false }: any) {
                   disabled={uploading}
                 />
               </label>
-            )}
+              )}
+            </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Привязать к врачу
+            </label>
+            <select
+              className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              {...methods.register("doctorId")}
+              onChange={(e) => {
+                const selectedId = e.target.value;
+                methods.setValue("doctorId", selectedId, { shouldDirty: true });
+                const selectedDoctor = doctors.find((d) => d.id === selectedId);
+                methods.setValue("doctorSlug", selectedDoctor?.slug || "", { shouldDirty: true });
+              }}
+            >
+              {doctors.map((doctor) => (
+                <option key={doctor.id} value={doctor.id}>
+                  {doctor.name?.ru || doctor.title || "Врач без имени"}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

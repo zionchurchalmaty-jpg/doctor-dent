@@ -21,7 +21,6 @@ import {
 const navItems = [
   { name: "Обзор", href: "/admin", icon: LayoutDashboard, exact: true },
   { name: "Блог", href: "/admin/blog", icon: FileText },
-  { name: "Кейсы", href: "/admin/cases", icon: Briefcase },
   { name: "Врачи", href: "/admin/doctors", icon: Users },
   { name: "Акции", href: "/admin/promos", icon: Tags },
 ];
