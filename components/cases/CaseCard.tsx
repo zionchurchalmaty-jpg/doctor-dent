@@ -4,7 +4,8 @@ import { ArrowRight } from "lucide-react";
 
 export interface CaseCardProps {
   id: string;
-  category: string;
+  slug?: string;
+  tags?: string[];
   title: string;
   doctorName: string;
   problem: string;
@@ -17,7 +18,8 @@ export interface CaseCardProps {
 
 export default function CaseCard({
   id,
-  category,
+  slug,
+  tags = [],
   title,
   doctorName,
   problem,
@@ -27,9 +29,9 @@ export default function CaseCard({
   beforeImage,
   afterImage,
 }: CaseCardProps) {
-
-  const safeBeforeImage = beforeImage || "/images/placeholder.png"; 
+  const safeBeforeImage = beforeImage || "/images/placeholder.png";
   const safeAfterImage = afterImage || "/images/placeholder.png";
+  const caseLink = slug || id;
 
   return (
     <div className="flex flex-col bg-white rounded-[24px] shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden h-full">
@@ -44,15 +46,33 @@ export default function CaseCard({
           <span className="absolute top-3 right-3 bg-[#10B981] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded z-10">
             После
           </span>
-          <Image src={safeAfterImage} alt="После" fill className="object-cover" />
+          <Image
+            src={safeAfterImage}
+            alt="После"
+            fill
+            className="object-cover"
+          />
         </div>
       </div>
 
       <div className="p-6 flex flex-col flex-grow">
         <div className="mb-3">
-          <span className="inline-block px-3 py-1 bg-blue-50 text-[#2563EB] text-xs font-semibold rounded-full mb-3">
-            {category}
-          </span>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {tags.length > 0 ? (
+              tags.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="bg-blue-50 text-blue-600 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider"
+                >
+                  {tag}
+                </span>
+              ))
+            ) : (
+              <span className="bg-blue-50 text-blue-600 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">
+                Кейс лечения
+              </span>
+            )}
+          </div>
           <h3 className="text-lg font-bold text-gray-900 leading-tight mb-1">
             {title}
           </h3>
@@ -77,13 +97,13 @@ export default function CaseCard({
 
         <div className="flex flex-col gap-2 mt-auto">
           <Link
-            href={`/cases/${id}`}
+            href={`/cases/${caseLink}`}
             className="w-full bg-[#F97316] hover:bg-[#ea580c] text-white text-sm font-semibold py-3 px-4 rounded-xl flex items-center justify-center transition-colors"
           >
             Посмотреть кейс <ArrowRight className="w-4 h-4 ml-2" />
           </Link>
-<Link
-            href={`/doctors/${doctorSlug}`} 
+          <Link
+            href={`/doctor/${doctorSlug}`}
             className="w-full bg-[#2563EB] hover:bg-blue-700 text-white text-sm font-semibold py-3 px-4 rounded-xl flex items-center justify-center transition-colors"
           >
             Записаться к этому врачу <ArrowRight className="w-4 h-4 ml-2" />

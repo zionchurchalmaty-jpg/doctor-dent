@@ -63,11 +63,11 @@ export default async function HomePage({
     <div className="min-h-screen">
       <Hero topDoctor={heroDoctor} />
 
-      <main className="bg-[#F8F9FA] pb-20 pt-10">
+      <main className="bg-[#F8F9FA] pb-12 md:pb-20 pt-8 md:pt-10">
         <ContentGrid
           title={t("TopDoctors.topTitle")}
           subtitle={t("TopDoctors.topSubtitle")}
-          icon={<Star className="w-8 h-8 fill-yellow-400 text-yellow-400" />}
+          icon={<Star className="w-6 h-6 md:w-8 md:h-8 fill-yellow-400 text-yellow-400" />}
           items={topDoctors.map((doctor, index) => {
             const reviews = doctor.reviews || [];
             const reviewsCount = reviews.length;
@@ -92,7 +92,7 @@ export default async function HomePage({
               : 0;
 
             return (
-              <div key={doctor.id} className="pt-4 pl-4 h-full">
+              <div key={doctor.id} className="h-full">
                 <DoctorCard
                   id={doctor.slug || doctor.id}
                   name={doctor.name?.[lang]}
@@ -123,54 +123,57 @@ export default async function HomePage({
               title={t("TopDoctors.promoTitle")}
               subtitle={t("TopDoctors.promoSubtitle")}
               buttonText={t("TopDoctors.promoBtn")}
-              buttonLink={`/${locale}/services/top-promotion`}
+              buttonLink={`/for-doctors`}
             />
           }
         />
 
         {promosData && promosData.length > 0 && (
-          <section className="bg-[#FFF7ED] py-12 md:py-20 w-full mt-16">
+          <section className="bg-[#FFF7ED] py-10 md:py-20 w-full mt-10 md:mt-16">
             <ContentGrid
               title={t("Promos.title")}
-              icon={<Tags className="w-8 h-8 text-[#FF5A00]" />}
+              icon={<Tags className="w-6 h-6 md:w-8 md:h-8 text-[#FF5A00]" />}
               items={promosData.map((promo: any) => (
-<PromoCard
-    key={promo.id}
-    image={promo.image}
-    badge={promo.badge}
-    title={promo.title}
-    description={promo.description}
-    newPrice={promo.newPrice}
-    oldPrice={promo.oldPrice}
-    buttonText={promo.buttonText || "Записаться"}
-    link={
-      promo.doctorSlug 
-        ? `/${locale}/doctors/${promo.doctorSlug}`
-        : `/${locale}/promos/${promo.id}`
-    }
-  />
+                <div key={promo.id} className="h-full">
+                  <PromoCard
+                    image={promo.image}
+                    badge={promo.badge}
+                    title={promo.title}
+                    description={promo.description}
+                    newPrice={promo.newPrice}
+                    oldPrice={promo.oldPrice}
+                    buttonText={promo.buttonText || "Записаться"}
+                    link={
+                      promo.doctorSlug 
+                        ? `/${locale}/doctor/${promo.doctorSlug}`
+                        : `/${locale}/promos/${promo.id}`
+                    }
+                  />
+                </div>
               ))}
               rows={1}
               showPagination={false}
               bottomContent={
-                <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm mt-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-[#FF5A00] flex items-center justify-center shrink-0">
-                      <TrendingUp className="w-6 h-6 text-white" />
+                <div className="bg-white border border-gray-200 rounded-2xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 shadow-sm mt-4">
+                  <div className="flex items-start md:items-center gap-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#FF5A00] flex items-center justify-center shrink-0">
+                      <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-white" />
                     </div>
                     <div>
-                      <h4 className="text-base font-bold text-gray-900">
-{t("Promos.cardTitle")}                      </h4>
-                      <p className="text-sm text-gray-500 mt-0.5">
-{t("Promos.cardText")}                      </p>
+                      <h4 className="text-sm md:text-base font-bold text-gray-900">
+                        {t("Promos.cardTitle")}                      
+                      </h4>
+                      <p className="text-xs md:text-sm text-gray-500 mt-1 md:mt-0.5">
+                        {t("Promos.cardText")}                      
+                      </p>
                     </div>
                   </div>
 
                   <Link
-                    href={`/${locale}/business/ads`}
+                    href={`/for-doctors`}
                     className="w-full md:w-auto px-6 py-3 bg-[#FF5A00] hover:bg-[#E04D00] transition-colors text-white font-semibold rounded-xl text-sm whitespace-nowrap text-center"
                   >
-{t("Promos.buttonText")} 
+                    {t("Promos.buttonText")} 
                   </Link>
                 </div>
               }
@@ -178,7 +181,7 @@ export default async function HomePage({
           </section>
         )}
 
-        {categoriesWithDoctors.map((category) => {
+{categoriesWithDoctors.map((category) => {
           if (category.doctors.length === 0) return null;
 
           const formattedPrice = category.basePrice
@@ -188,7 +191,7 @@ export default async function HomePage({
             : null;
 
           const categorySubtitle = (
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               <p>{category.description?.[lang]}</p>
               {formattedPrice && (
                 <Link
@@ -204,7 +207,7 @@ export default async function HomePage({
           );
 
           return (
-            <div key={category.id} className="mt-16">
+            <div key={category.id} className="mt-10 md:mt-16">
               <ContentGrid
                 title={category.title[lang]}
                 subtitle={categorySubtitle}
@@ -233,7 +236,7 @@ export default async function HomePage({
                     : 0;
 
                   return (
-                    <div key={doctor.id} className="pt-4 pl-4 h-full">
+                    <div key={doctor.id} className="h-full">
                       <DoctorCard
                         id={doctor.slug || doctor.id}
                         name={doctor.name?.[lang]}
@@ -257,29 +260,41 @@ export default async function HomePage({
                 })}
                 rows={2}
                 showPagination={true}
+                
+                bottomContent={
+                  <div className="flex justify-center mt-6 md:mt-10">
+                    <Link
+                      href={`/${locale}/search?specialty=${encodeURIComponent(category.title[lang])}`}
+                      className="inline-flex items-center justify-center px-8 py-3.5 font-medium rounded-xl text-[#2563EB] bg-blue-50 hover:bg-blue-100 transition-colors shadow-sm"
+                    >
+                      {lang === "kz" 
+                        ? `Барлық дәрігерлер (${category.title[lang]})` 
+                        : `Все врачи направления «${category.title[lang]}»`}
+                    </Link>
+                  </div>
+                }
               />
             </div>
           );
         })}
-              </main>
+      </main>
 
-        <section className="bg-[#2563EB] w-full py-16 mt-20 flex flex-col items-center justify-center text-center px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-5 tracking-wide">
-            {lang === "kz" ? "Сіз тіс дәрігерісіз бе?" : "Вы стоматолог?"}
-          </h2>
-          <p className="text-white/90 text-base md:text-lg mb-8 max-w-2xl tracking-wide font-light">
-            {lang === "kz"
-              ? "DentDoctor.kz сайтында өз парақшаңызды орналастырыңыз және пациенттерді тікелей қабылдаңыз"
-              : "Разместите свою страницу на DentDoctor.kz и получайте пациентов напрямую"}
-          </p>
-          <Link
-            href={`/${locale}/for-doctors`} 
-            className="bg-white text-[#2563EB] hover:bg-blue-50 transition-colors px-8 py-3 rounded-xl font-medium text-sm md:text-base shadow-sm"
-          >
-            {lang === "kz" ? "Толығырақ білу" : "Узнать подробнее"}
-          </Link>
-        </section>
+      <section className="bg-[#2563EB] w-full py-12 md:py-16 mt-12 md:mt-20 flex flex-col items-center justify-center text-center px-6">
+        <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 md:mb-5 tracking-wide">
+          {lang === "kz" ? "Сіз тіс дәрігерісіз бе?" : "Вы стоматолог?"}
+        </h2>
+        <p className="text-white/90 text-sm md:text-lg mb-6 md:mb-8 max-w-2xl tracking-wide font-light">
+          {lang === "kz"
+            ? "DentDoctor.kz сайтында өз парақшаңызды орналастырыңыз және пациенттерді тікелей қабылдаңыз"
+            : "Разместите свою страницу на DentDoctor.kz и получайте пациентов напрямую"}
+        </p>
+        <Link
+          href={`/${locale}/for-doctors`} 
+          className="bg-white text-[#2563EB] hover:bg-blue-50 transition-colors px-6 md:px-8 py-3 rounded-xl font-medium text-sm md:text-base shadow-sm w-full md:w-auto"
+        >
+          {lang === "kz" ? "Толығырақ білу" : "Узнать подробнее"}
+        </Link>
+      </section>
     </div>
   );
 }
-

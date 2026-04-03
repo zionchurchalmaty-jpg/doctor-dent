@@ -8,20 +8,16 @@ export async function getSearchFilters(locale: "ru" | "kz") {
     "doctors",
   )) as unknown as DoctorProfile[];
 
-  const cities = new Set<string>();
   const specialties = new Set<string>();
 
   doctors.forEach((doc) => {
-    const fullAddress = doc.location?.address?.[locale];
-    const city = fullAddress ? fullAddress.split(",")[0] : null;
-    if (city) cities.add(city);
     if (doc.specialty?.[locale]) {
       specialties.add(doc.specialty[locale]);
     }
   });
 
   return {
-    cities: Array.from(cities),
+    cities: [],
     specialties: Array.from(specialties),
   };
 }
@@ -37,10 +33,9 @@ export async function searchDoctors(
 
   return doctors.filter((doc) => {
     const matchCity = city
-      ? doc.location?.address?.[locale]
-          ?.toLowerCase()
-          .includes(city.toLowerCase())
+      ? doc.location?.cityId === city
       : true;
+      
     const matchSpecialty = specialty
       ? doc.specialty?.[locale]?.toLowerCase().includes(specialty.toLowerCase())
       : true;

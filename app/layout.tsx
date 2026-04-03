@@ -3,8 +3,15 @@ import { getMessages, getLocale } from 'next-intl/server';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import type { Metadata } from 'next'; 
+
+import ConditionalNavbar from '@/components/ConditionalNavbar';
+import ConditionalFooter from '@/components/ConditionalFooter';
+
+export const metadata: Metadata = {
+  title: 'DentDoctor', 
+  description: 'Платформа для поиска стоматологов с полными профилями, кейсами и отзывами',
+};
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -53,12 +60,11 @@ export default async function RootLayout({
           />
         </noscript>
 
-        <Navbar/>
-        
         <NextIntlClientProvider messages={messages}>
+          <ConditionalNavbar />
           {children}
+          <ConditionalFooter />
         </NextIntlClientProvider>
-              <Footer />
 
       </body>
     </html>

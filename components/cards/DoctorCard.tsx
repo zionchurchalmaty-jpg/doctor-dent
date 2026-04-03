@@ -136,7 +136,7 @@ export default function DoctorCard({
           </div>
 
           <Link
-            href={`/${lang}/doctors/${id}`}
+            href={`/${lang}/doctor/${id}`}
             className="text-[#2563EB] font-medium text-sm flex items-center gap-1 hover:text-blue-700 transition-colors"
           >
             {t("more")} <ArrowRight className="w-4 h-4" />

@@ -20,6 +20,7 @@ import Image from "next/image";
 import { DoctorProfile } from "@/lib/firestore/types";
 import SearchWidget from "./SearchWidget";
 import { Button } from "@/components/ui/button";
+import { CITIES } from "@/lib/cities";
 
 interface HeroProps {
   variant?: "home" | "blog" | "doctor" | "cases" | "rent" | "about";
@@ -31,6 +32,7 @@ interface HeroProps {
   stats?: {
     cases?: number | string;
     doctors?: number | string;
+    cities?: number | string;
     successRate?: string;
   };
 }
@@ -44,21 +46,11 @@ export default function Hero({
   tags = [],
   stats = { cases: 12, doctors: 38, successRate: "98%" }
 }: HeroProps) {
-  const tHome = useTranslations("HomePage.Hero");
-  const tDoc = useTranslations("DoctorProfile");
-  const locale = useLocale() as "ru" | "kz";
-
-  const getLocalizedText = (textField: any) => {
-    if (!textField) return null;
-    if (typeof textField === "string") return textField;
-    return textField[locale] || textField["ru"] || null;
-  };
 
   if (variant === "rent") {
     return (
       <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
           <div className="flex flex-col gap-6 text-white relative z-10">
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
               {title || "Арендуйте персональную страницу на DentDoctor.kz"}
@@ -102,7 +94,7 @@ export default function Hero({
             <div className="w-full max-w-[500px] bg-white rounded-[32px] overflow-hidden shadow-2xl">
               <div className="relative w-full h-[240px] md:h-[280px]">
                 <Image
-                  src="/images/dentist-working.jpg"
+                  src="/images/for-doctors_hero.png"
                   alt="Стоматолог за работой"
                   fill
                   className="object-cover"
@@ -135,77 +127,11 @@ export default function Hero({
       </section>
     );
   }
-  if (variant === "doctor" && doctor) {
-    const fullAddress = getLocalizedText(doctor.location?.address);
-    const shortLocation = fullAddress ? fullAddress.split(",")[0] : null;
-    const highlightText = getLocalizedText(doctor.shortDescription) || getLocalizedText(doctor.reasons?.[0]);
-
-    return (
-      <section className="bg-[#2563EB] px-6 py-10 md:py-16 font-sans relative">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start">
-          <div className="relative w-64 h-64 md:w-[320px] md:h-[320px] shrink-0 rounded-3xl overflow-hidden shadow-xl">
-            <Image
-              src={doctor.photo || "/images/placeholder.png"}
-              alt={getLocalizedText(doctor.name) || "Врач"}
-              fill
-              className="object-cover"
-            />
-          </div>
-
-          <div className="flex flex-col gap-4 text-white w-full pt-2">
-            {doctor.specialty && (
-              <div className="bg-[#4B84F1] px-3 py-1 rounded-full text-[13px] font-medium w-fit">
-                {getLocalizedText(doctor.specialty)}
-              </div>
-            )}
-            <h1 className="text-3xl md:text-4xl lg:text-[42px] font-bold leading-tight">
-              {getLocalizedText(doctor.name)}
-            </h1>
-            <div className="flex flex-wrap items-center gap-5 text-sm md:text-base opacity-95 mt-1">
-              {doctor.experienceYears ? (
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4" /> 
-                  {tDoc("experience", { years: doctor.experienceYears })}
-                </span>
-              ) : null}
-
-              {shortLocation && (
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4" /> 
-                  {shortLocation}
-                </span>
-              )}
-            </div>
-            {highlightText && (
-              <div className="bg-[#3A74F0] rounded-xl p-4 md:p-5 mt-2 max-w-xl">
-                <p className="font-medium text-sm md:text-base">{highlightText}</p>
-              </div>
-            )}
-            <div className="flex flex-wrap gap-3 mt-4">
-              <Button className="bg-white text-[#2563EB] hover:bg-gray-100 rounded-xl px-5 h-11 text-sm font-semibold">
-                <Calendar className="w-4 h-4 mr-2" />
-                {tDoc("bookButton")}
-              </Button>
-              
-              <Button className="bg-[#10B981] text-white hover:bg-[#059669] rounded-xl px-5 h-11 text-sm font-semibold">
-                <svg className="w-4 h-4 mr-2 fill-current" viewBox="0 0 24 24"><path d="M12.031 0C5.383 0 0 5.383 0 12.031c0 2.622.844 5.05 2.274 7.042L.38 24l5.06-1.884A11.964 11.964 0 0012.031 24c6.648 0 12.031-5.383 12.031-12.031C24.062 5.383 18.679 0 12.031 0zm0 22.015a9.927 9.927 0 01-5.1-1.4l-.365-.216-3.791 1.41.996-3.696-.237-.377A9.914 9.914 0 012.046 12.03c0-5.508 4.48-9.988 9.985-9.988s9.985 4.48 9.985 9.988-4.48 9.987-9.985 9.987z"/></svg>
-                WhatsApp
-              </Button>
-
-              <Button className="bg-[#4B84F1] hover:bg-[#3A74F0] text-white rounded-xl px-5 h-11 text-sm font-semibold">
-                <Phone className="w-4 h-4 mr-2" />
-                {tDoc("callButton")}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   if (variant === "about") {
     return (
       <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
+        {/* ... (код about без изменений) ... */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           <div className="flex flex-col gap-6 text-white relative z-10">
@@ -242,7 +168,7 @@ export default function Hero({
             <div className="w-full max-w-[500px] bg-white rounded-[32px] overflow-hidden shadow-2xl transition-all duration-300 hover:shadow-blue-900/40 hover:-translate-y-1">
               <div className="relative w-full h-[220px] md:h-[260px]">
                 <Image
-                  src="/images/team.jpg"
+                  src="/images/about_hero.png"
                   alt="Команда DentDoctor"
                   fill
                   className="object-cover"
@@ -254,11 +180,15 @@ export default function Hero({
                 
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="flex flex-col gap-1">
-                    <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">36</span>
+                    <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">
+                      {stats?.doctors || 0}
+                    </span>
                     <span className="text-xs md:text-sm text-gray-500 font-medium">Врачей</span>
                   </div>
                   <div className="flex flex-col gap-1 border-x border-gray-100">
-                    <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">5+</span>
+                    <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">
+                      {stats?.cities || 0}+
+                    </span>
                     <span className="text-xs md:text-sm text-gray-500 font-medium">Городов</span>
                   </div>
                   <div className="flex flex-col gap-1">
@@ -269,7 +199,8 @@ export default function Hero({
               </div>
             </div>
           </div>
-        </div>
+
+        </div> 
       </section>
     );
   }
@@ -310,7 +241,7 @@ export default function Hero({
             <div className="w-full max-w-[520px] bg-white rounded-[32px] overflow-hidden shadow-2xl">
               <div className="relative w-full h-[240px] md:h-[300px]">
                 <Image
-                  src="/images/dental-office.jpg" 
+                  src="/images/cases_hero.png" 
                   alt="Стоматологический кабинет"
                   fill
                   className="object-cover"
@@ -394,7 +325,7 @@ export default function Hero({
             <div className="w-full max-w-[480px] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col">
               <div className="relative w-full h-[240px]">
                 <Image
-                  src="https://img.freepik.com/free-photo/woman-working-on-laptop-at-home_23-2148969851.jpg"
+                  src="/images/blog_hero.png"
                   alt="Blog Hero"
                   fill
                   className="object-cover"
@@ -429,6 +360,101 @@ export default function Hero({
     );
   }
 
+  const tHome = useTranslations("HomePage.Hero");
+  const tDoc = useTranslations("DoctorProfile");
+  const locale = useLocale() as "ru" | "kz";
+
+  const getLocalizedText = (textField: any) => {
+    if (!textField) return null;
+    if (typeof textField === "string") return textField;
+    return textField[locale] || textField["ru"] || null;
+  };
+
+  if (variant === "doctor" && doctor) {
+    const rawAddress = getLocalizedText(doctor.location?.address);
+    const shortAddress = rawAddress ? rawAddress.split(",")[0] : null;
+    
+    const cityId = doctor.location?.cityId;
+    const cityObj = CITIES.find((c) => c.id === cityId);
+    const cityName = cityObj ? cityObj.name[locale] : cityId || "";
+
+    const shortLocation = cityName && shortAddress 
+      ? `${cityName}, ${shortAddress}` 
+      : (cityName || shortAddress || null);
+
+    const highlightText = getLocalizedText(doctor.shortDescription) || getLocalizedText(doctor.reasons?.[0]);
+
+    let cleanPhone = doctor.location?.phone ? doctor.location.phone.replace(/\D/g, "") : "";
+    
+    if (cleanPhone.startsWith("8") && cleanPhone.length === 11) {
+      cleanPhone = "7" + cleanPhone.slice(1);
+    }
+
+    const whatsappUrl = `https://wa.me/${cleanPhone}`;
+    const phoneUrl = doctor.location?.phone ? `tel:+${cleanPhone}` : "#";
+
+    return (
+      <section className="bg-[#2563EB] px-6 py-10 md:py-16 font-sans relative">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start">
+          <div className="relative w-64 h-64 md:w-[320px] md:h-[320px] shrink-0 rounded-3xl overflow-hidden shadow-xl">
+            <Image
+              src={doctor.photo || "/images/placeholder.png"}
+              alt={getLocalizedText(doctor.name) || "Врач"}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          <div className="flex flex-col gap-4 text-white w-full pt-2">
+            {doctor.specialty && (
+              <div className="bg-[#4B84F1] px-3 py-1 rounded-full text-[13px] font-medium w-fit">
+                {getLocalizedText(doctor.specialty)}
+              </div>
+            )}
+            <h1 className="text-3xl md:text-4xl lg:text-[42px] font-bold leading-tight">
+              {getLocalizedText(doctor.name)}
+            </h1>
+            <div className="flex flex-wrap items-center gap-5 text-sm md:text-base opacity-95 mt-1">
+              {doctor.experienceYears ? (
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-4 h-4" /> 
+                  {tDoc("experience", { years: doctor.experienceYears })}
+                </span>
+              ) : null}
+
+              {shortLocation && (
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4" /> 
+                  {shortLocation}
+                </span>
+              )}
+            </div>
+            {highlightText && (
+              <div className="bg-[#3A74F0] rounded-xl p-4 md:p-5 mt-2 max-w-xl">
+                <p className="font-medium text-sm md:text-base">{highlightText}</p>
+              </div>
+            )}
+            <div className="flex flex-wrap gap-3 mt-4">
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="block">
+                <Button className="bg-[#22c05c] text-white hover:bg-[#059669] rounded-xl px-5 h-11 text-sm font-semibold w-full sm:w-auto">
+                  <svg className="w-4 h-4 mr-2 fill-current" viewBox="0 0 24 24"><path d="M12.031 0C5.383 0 0 5.383 0 12.031c0 2.622.844 5.05 2.274 7.042L.38 24l5.06-1.884A11.964 11.964 0 0012.031 24c6.648 0 12.031-5.383 12.031-12.031C24.062 5.383 18.679 0 12.031 0zm0 22.015a9.927 9.927 0 01-5.1-1.4l-.365-.216-3.791 1.41.996-3.696-.237-.377A9.914 9.914 0 012.046 12.03c0-5.508 4.48-9.988 9.985-9.988s9.985 4.48 9.985 9.988-4.48 9.987-9.985 9.987z"/></svg>
+                  WhatsApp
+                </Button>
+              </a>
+
+              <a href={phoneUrl} className="block">
+                <Button className="bg-[#4B84F1] hover:bg-[#3A74F0] text-white rounded-xl px-5 h-11 text-sm font-semibold w-full sm:w-auto">
+                  <Phone className="w-4 h-4 mr-2" />
+                  {tDoc("callButton")}
+                </Button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   const heroImage = topDoctor?.photo || "/images/placeholder.png";
 
   return (
@@ -446,9 +472,6 @@ export default function Hero({
 
           <SearchWidget />
 
-          <button className="flex items-center text-sm font-medium hover:text-blue-200 w-fit transition-colors">
-            {tHome("placePage")} <ArrowRight className="w-4 h-4 ml-1" />
-          </button>
         </div>
 
         <div className="flex justify-center lg:justify-end w-full mt-8 lg:mt-0 relative z-10">
