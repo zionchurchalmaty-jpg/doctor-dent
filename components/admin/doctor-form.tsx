@@ -12,7 +12,7 @@ import {
 
 import { useAuth } from "./auth-provider";
 
-import { createContent, updateContent, syncDoctorCases } from "@/lib/firestore/content";
+import { createContent, updateContent, syncDoctorCases, generateSlug } from "@/lib/firestore/content";
 
 import { DoctorBasicTab } from "./doctor-tabs/basic-tab";
 import { DoctorBenefitsTab } from "./doctor-tabs/benefits-tab";
@@ -66,10 +66,10 @@ export function DoctorForm({ initialData, isEditing = false }: any) {
         doctorId = await createContent(doctorData, user.uid, user.email || "Admin");
       }
 
-      if (doctorId) {
-        await syncDoctorCases(doctorId, doctorData.name, cases || []);
+if (doctorId) {
+        const doctorSlug = doctorData.slug || generateSlug(doctorData.name?.ru || "doctor");
+        await syncDoctorCases(doctorId, doctorSlug, doctorData.name, cases || []);
       }
-
       router.push("/admin/doctors");
       router.refresh();
     } catch (error) {

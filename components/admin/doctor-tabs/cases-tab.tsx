@@ -7,6 +7,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import { ImageUpload } from "../image-upload";
+import { ContentEditor } from "../content-editor";
 
 export function DoctorCasesTab() {
   const { register, control, watch, setValue } = useFormContext();
@@ -39,7 +40,7 @@ export function DoctorCasesTab() {
 
       <div className="space-y-8">
         {fields.map((field, index) => (
-          <div key={field.id} className="p-6 bg-gray-50 rounded-xl border border-gray-200 relative">
+          <div key={field.id} className="p-6 bg-gray-50 rounded-xl border border-gray-200 relative shadow-sm">
             
             <input type="hidden" {...register(`cases.${index}.id`)} />
 
@@ -53,7 +54,7 @@ export function DoctorCasesTab() {
               <Trash2 className="w-4 h-4" />
             </Button>
 
-            <h3 className="font-medium mb-6">Кейс #{index + 1}</h3>
+            <h3 className="font-medium mb-6 text-lg border-b pb-2">Кейс #{index + 1}</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
@@ -81,7 +82,7 @@ export function DoctorCasesTab() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div>
                 <ImageUpload 
                   value={watch(`cases.${index}.beforeImage`)} 
@@ -102,16 +103,25 @@ export function DoctorCasesTab() {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <Label className="font-bold">Описание проведенного лечения</Label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-xs text-gray-500 mb-1 block">На русском (RU)</Label>
-                  <Input {...register(`cases.${index}.description.ru`)} placeholder="Установка 4-х имплантов..." />
+            <div className="space-y-6 bg-white p-6 rounded-xl border border-gray-100">
+              <Label className="font-bold text-base block border-b pb-2">Описание проведенного лечения</Label>
+              
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold text-gray-700 block">Развернутое описание (RU)</Label>
+                  <ContentEditor 
+                    content={watch(`cases.${index}.description.ru`) || ""} 
+                    onChange={(html: string) => setValue(`cases.${index}.description.ru`, html, { shouldDirty: true })} 
+                    placeholder="Опишите процесс лечения, используемые материалы и результат..." 
+                  />
                 </div>
-                <div>
-                  <Label className="text-xs text-gray-500 mb-1 block">На казахском (KZ)</Label>
-                  <Input {...register(`cases.${index}.description.kz`)} placeholder="4 имплант орнату..." />
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-semibold text-gray-700 block">Краткое описание (KZ)</Label>
+                  <Input 
+                    {...register(`cases.${index}.description.kz`)} 
+                    placeholder="Емдеу барысы туралы қысқаша ақпарат..." 
+                  />
                 </div>
               </div>
             </div>

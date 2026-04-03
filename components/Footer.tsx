@@ -52,11 +52,11 @@ export default function Footer() {
           <ul className="space-y-4 text-slate-400 text-sm">
             <li className="flex items-center gap-3">
               <Phone className="w-4 h-4" />
-              <span>+7 (700) 123-45-67</span>
+              <span>+7 (705) 279-30-78</span>
             </li>
             <li className="flex items-center gap-3">
               <Mail className="w-4 h-4" />
-              <a href="mailto:info@dentdoctor.kz" className="hover:text-white transition">info@dentdoctor.kz</a>
+              <a href="mailto:andrey.chen73@gmail.com" className="hover:text-white transition">andrey.chen73@gmail.com</a>
             </li>
             <li className="flex items-center gap-3">
               <MapPin className="w-4 h-4" />

@@ -26,34 +26,47 @@ export function DoctorShowcase({ doctor }: { doctor: DoctorProfile }) {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {doctor.cases.map((c, idx) => (
-                <div key={idx} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
-                  <div className="flex w-full h-48 relative">
-                    <div className="w-1/2 relative border-r border-white/20">
-                      <Image src={c.beforeImage || "/images/placeholder.png"} alt="Before" fill className="object-cover" />
-                      <span className="absolute top-2 left-2 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">До</span>
-                    </div>
-                    <div className="w-1/2 relative">
-                      <Image src={c.afterImage || "/images/placeholder.png"} alt="After" fill className="object-cover" />
-                      <span className="absolute top-2 right-2 bg-[#10B981] text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">После</span>
-                    </div>
-                  </div>
-                  
-                  <div className="p-5 flex flex-col flex-1">
-                    <h3 className="font-bold text-sm text-gray-900 mb-2">{getLocalizedText(c.title)}</h3>
-                    <p className="text-xs text-gray-500 mb-4 line-clamp-3 flex-1">{getLocalizedText(c.description)}</p>
-                    
-                    <div className="flex items-end justify-between mt-auto pt-4 border-t border-gray-50">
-                      <div className="text-xs text-gray-500">
-                        {t("duration")}: {getLocalizedText(c.duration)}
+              {doctor.cases.map((c: any, idx) => {
+                const caseLink = c.slug || c.id; 
+                
+                return (
+                  /* 2. Оборачиваем именно карточку, добавляем локаль в ссылку */
+                  <Link 
+                    key={idx} 
+                    href={`/cases/${caseLink}`} 
+                    className="flex flex-col group"
+                  >
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full group-hover:shadow-md transition-shadow cursor-pointer">
+                      <div className="flex w-full h-48 relative">
+                        <div className="w-1/2 relative border-r border-white/20">
+                          <Image src={c.beforeImage || "/images/placeholder.png"} alt="Before" fill className="object-cover" />
+                          <span className="absolute top-2 left-2 bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">До</span>
+                        </div>
+                        <div className="w-1/2 relative">
+                          <Image src={c.afterImage || "/images/placeholder.png"} alt="After" fill className="object-cover" />
+                          <span className="absolute top-2 right-2 bg-[#10B981] text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase">После</span>
+                        </div>
                       </div>
-                      <div className="text-sm font-bold text-[#2563EB]">
-                        {c.price} ₸
+                      
+                      <div className="p-5 flex flex-col flex-1">
+                        <h3 className="font-bold text-sm text-gray-900 mb-2 group-hover:text-[#2563EB] transition-colors">
+                          {getLocalizedText(c.title)}
+                        </h3>
+                        <p className="text-xs text-gray-500 mb-4 line-clamp-3 flex-1">{getLocalizedText(c.description)}</p>
+                        
+                        <div className="flex items-end justify-between mt-auto pt-4 border-t border-gray-50">
+                          <div className="text-xs text-gray-500">
+                            {t("duration")}: {getLocalizedText(c.duration)}
+                          </div>
+                          <div className="text-sm font-bold text-[#2563EB]">
+                            {c.price} ₸
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
 
             <div className="flex justify-center mt-8">

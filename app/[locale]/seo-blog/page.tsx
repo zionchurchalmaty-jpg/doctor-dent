@@ -5,7 +5,7 @@ import { getPublishedContent } from "@/lib/firestore/content";
 
 export default async function BlogPage() {
   const rawArticlesData = await getPublishedContent("blog");
-  const articlesData = rawArticlesData.filter((article: any) => !article.isSeo);
+  const articlesData = rawArticlesData.filter((article: any) => article.isSeo);
 
   let allCategories: string[] = [];
   articlesData.forEach((article: any) => {
@@ -63,13 +63,13 @@ export default async function BlogPage() {
               <ArticleCard
                 key={article.id}
                 id={article.id}
-                image={article.image || "/images/blog-placeholder.png"}
+                image={article.image || "/images/seo-placeholder.png"}
                 imageAlt={article.seo?.imageAlt || article.title}
                 category={getSingleCategory(article)} 
                 date={rawDate} 
                 title={article.title}
                 excerpt={article.excerpt || article.description || "..."}
-                link={`/blog/${article.slug}`}
+                link={`/${article.slug}`}
               />
             );
           })}

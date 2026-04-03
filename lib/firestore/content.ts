@@ -22,11 +22,14 @@ const PLACEHOLDERS: Record<ContentType, string> = {
   promos: "/images/promo-placeholder.png",
 };
 
-function generateSlug(title: string): string {
+export function generateSlug(title: string): string {
   return slugify(title, { lower: true, strict: true, locale: "ru" });
 }
 
-function getPlaceholder(type: ContentType): string {
+function getPlaceholder(type: ContentType, isSeo?: boolean): string {
+  if (type === "blog" && isSeo) {
+    return "/images/seo-placeholder.png";
+  }
   return PLACEHOLDERS[type] || "/images/placeholder.png";
 }
 
@@ -68,7 +71,7 @@ export function serializeFirebaseData(data: any): any {
 function toFirestoreData(input: any, authorId: string, authorName: string) {
   const now = Timestamp.now();
   
-  const mainImageUrl = input.photo || input.image || getPlaceholder(input.contentType);
+  const mainImageUrl = input.photo || input.image || getPlaceholder(input.contentType, input.isSeo);
   const titleText = input.title || input.name?.ru || input.name?.kz || "untitled";
   const slug = generateSlug(titleText);
 
@@ -135,7 +138,7 @@ export async function updateContent(id: string, input: any): Promise<void> {
   const existing = await getDoc(ref);
   if (!existing.exists()) throw new Error("Document not found");
 
-  const mainImageUrl = input.photo || input.image || getPlaceholder(input.contentType);
+  const mainImageUrl = input.photo || input.image || getPlaceholder(input.contentType, input.isSeo);
   const titleText = input.title || input.name?.ru || input.name?.kz || "untitled";
   const slug = generateSlug(titleText);
 
@@ -335,7 +338,7 @@ export async function getDoctorsByCategory(categoryId: string): Promise<DoctorPr
   return serializeFirebaseData(rawData) as DoctorProfile[];
 }
 
-export async function syncDoctorCases(doctorId: string, doctorName: any, formCases: any[]) {
+export async function syncDoctorCases(doctorId: string, doctorSlug: string, doctorName: any, formCases: any[]) {
   const casesRef = collection(db, "cases");
   const batch = writeBatch(db);
 
@@ -345,9 +348,16 @@ export async function syncDoctorCases(doctorId: string, doctorName: any, formCas
 
   const formCasesIds: string[] = [];
 
-  for (const caseItem of formCases) {
+  const safeFormCases = Array.isArray(formCases) ? formCases : [];
+
+  for (const caseItem of safeFormCases) {
+    const titleText = caseItem.title?.ru || caseItem.title?.kz || "untitled-case";
+    const slug = generateSlug(titleText);
+
     const caseData = {
       ...caseItem,
+      slug,
+      doctorSlug,
       doctorId,
       doctorName: doctorName || { ru: "", kz: "" },
       contentType: "cases",
