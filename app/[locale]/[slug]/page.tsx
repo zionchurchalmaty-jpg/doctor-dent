@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getContentBySlug } from "@/lib/firestore/content";
+import { getContentBySlug } from "@/lib/firestore/client-content";
 import Image from "next/image";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -49,13 +49,14 @@ export default async function BlogPostPage({ params }: PageProps) {
       ? rawDate.toDate()
       : new Date(rawDate || Date.now());
 
-  const formattedDate = dateObject.toLocaleDateString("ru-RU", { 
-    day: "2-digit", 
-    month: "2-digit", 
-    year: "numeric" 
+  const formattedDate = dateObject.toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
   });
 
-  const firstTag = article.tags && article.tags.length > 0 ? article.tags[0] : null;
+  const firstTag =
+    article.tags && article.tags.length > 0 ? article.tags[0] : null;
 
   return (
     <>
@@ -66,11 +67,10 @@ export default async function BlogPostPage({ params }: PageProps) {
         />
       )}
       <main className="min-h-screen bg-white pt-8 pb-20 font-sans">
-        
         <div className="border-b border-gray-100 mb-10 pb-4">
           <div className="max-w-4xl mx-auto px-6">
             <Link
-              href={`/${locale}/blog`}
+              href={`/blog`}
               className="inline-flex items-center text-sm font-medium text-[#2563EB] hover:text-blue-800 transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -80,7 +80,6 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
 
         <article className="max-w-4xl mx-auto px-6">
-          
           <div className="flex items-center gap-4 mb-6">
             {firstTag && (
               <span className="bg-[#EFF6FF] text-[#2563EB] px-3 py-1 rounded-md text-xs font-semibold tracking-wide">
@@ -98,22 +97,24 @@ export default async function BlogPostPage({ params }: PageProps) {
           </h1>
 
           {article.image && (
-            <figure className="mb-12">
-              <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
-                <Image
-                  src={article.image}
-                  alt={article.seo?.imageAlt || article.title}
-                  title={article.seo?.imageTitle}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </figure>
+            <div className="w-full max-w-none mx-auto mb-12">
+              <figure className="max-w-6xl mx-auto w-full">
+                <div className="relative w-full aspect-[2560/1695] rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
+                  <Image
+                    src={article.image}
+                    alt={article.seo?.imageAlt || article.title}
+                    title={article.seo?.imageTitle}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </figure>
+            </div>
           )}
 
           {article.content && (
-            <div 
+            <div
               className="prose prose-lg max-w-none text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-a:text-[#2563EB]"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
@@ -126,14 +127,13 @@ export default async function BlogPostPage({ params }: PageProps) {
             <p className="text-gray-600 mb-8 text-base md:text-lg">
               Найдите квалифицированного стоматолога в вашем городе
             </p>
-            <Link 
-              href={`/search`} 
+            <Link
+              href={`/search`}
               className="inline-block bg-[#2563EB] text-white px-10 py-4 rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-sm"
             >
               Выбрать врача
             </Link>
           </div>
-
         </article>
       </main>
     </>

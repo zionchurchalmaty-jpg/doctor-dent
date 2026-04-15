@@ -1,7 +1,7 @@
 import { ContentGrid } from "@/components/ui/content-grid";
 import ArticleCard from "@/components/cards/ArticleCard";
 import Hero from "@/components/Hero"; 
-import { getPublishedContent } from "@/lib/firestore/content";
+import { getPublishedContent } from "@/lib/firestore/client-content";
 
 export default async function BlogPage() {
   const rawArticlesData = await getPublishedContent("blog");

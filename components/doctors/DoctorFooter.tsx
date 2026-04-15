@@ -111,7 +111,12 @@ export function DoctorFooter({ doctor }: { doctor: DoctorProfile }) {
               <h4 className="text-sm font-bold text-[#2563EB] mb-1 flex items-center gap-2">
                 📞 {t("contacts")}
               </h4>
-              <p className="text-sm text-gray-700">{doctor.location.phone}</p>
+              <a
+                href={`tel:+${cleanPhone}`}
+                className="text-sm text-gray-700 hover:text-[#2563EB] transition-colors"
+              >
+                {doctor.location.phone}
+              </a>
             </div>
           </div>
 

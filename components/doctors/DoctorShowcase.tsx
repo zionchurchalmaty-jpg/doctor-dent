@@ -23,14 +23,13 @@ export function DoctorShowcase({ doctor }: { doctor: DoctorProfile }) {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-900">{t("casesTitle")}</h2>
-            </div>
-            
+            </div>!
+            !
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {doctor.cases.map((c: any, idx) => {
                 const caseLink = c.slug || c.id; 
                 
                 return (
-                  /* 2. Оборачиваем именно карточку, добавляем локаль в ссылку */
                   <Link 
                     key={idx} 
                     href={`/cases/${caseLink}`} 

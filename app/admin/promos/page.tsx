@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Plus, Edit, Trash2, Loader2, Tags } from "lucide-react";
-import { getAdminContent, deleteContent } from "@/lib/firestore/content";
+import { getAdminContent, deleteContent } from "@/lib/firestore/client-content";
 
 export default function PromosPage() {
   const [promos, setPromos] = useState<any[]>([]);

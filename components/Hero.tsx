@@ -1,20 +1,20 @@
 "use client";
 
 import { useTranslations, useLocale } from "next-intl";
-import { 
-  CheckCircle2, 
-  ArrowRight, 
-  BookOpen, 
-  Clock, 
-  MapPin, 
-  Calendar, 
+import {
+  CheckCircle2,
+  ArrowRight,
+  BookOpen,
+  Clock,
+  MapPin,
+  Calendar,
   Phone,
   Target,
   TrendingUp,
   Users,
   Mail,
   Check,
-  ShieldCheck
+  ShieldCheck,
 } from "lucide-react";
 import Image from "next/image";
 import { DoctorProfile } from "@/lib/firestore/types";
@@ -44,9 +44,8 @@ export default function Hero({
   title,
   subtitle,
   tags = [],
-  stats = { cases: 12, doctors: 38, successRate: "98%" }
+  stats = { cases: 12, doctors: 38, successRate: "98%" },
 }: HeroProps) {
-
   if (variant === "rent") {
     return (
       <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
@@ -56,7 +55,8 @@ export default function Hero({
               {title || "Арендуйте персональную страницу на DentDoctor.kz"}
             </h1>
             <p className="text-blue-100 text-lg md:text-xl max-w-lg opacity-90">
-              {subtitle || "Получайте пациентов напрямую через SEO-продвижение вашей страницы"}
+              {subtitle ||
+                "Получайте пациентов напрямую через SEO-продвижение вашей страницы"}
             </p>
 
             <ul className="space-y-5 mt-4">
@@ -64,26 +64,35 @@ export default function Hero({
                 <div className="bg-[#10B981] rounded-full p-2 shrink-0">
                   <Target className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-base md:text-lg font-medium">Прямые заявки от пациентов</span>
+                <span className="text-base md:text-lg font-medium">
+                  Прямые заявки от пациентов
+                </span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="bg-[#10B981] rounded-full p-2 shrink-0">
                   <TrendingUp className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-base md:text-lg font-medium">SEO-продвижение вашей страницы</span>
+                <span className="text-base md:text-lg font-medium">
+                  SEO-продвижение вашей страницы
+                </span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="bg-[#10B981] rounded-full p-2 shrink-0">
                   <Users className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-base md:text-lg font-medium">Только целевая аудитория</span>
+                <span className="text-base md:text-lg font-medium">
+                  Только целевая аудитория
+                </span>
               </li>
             </ul>
 
             <div className="flex flex-wrap gap-4 mt-6">
-              <Button className="bg-white text-[#1d4ed8] hover:bg-gray-100 rounded-xl px-8 h-12 text-base font-bold shadow-lg">
+              <a
+                href="tel:+77052793078"
+                className="bg-white text-[#1d4ed8] hover:bg-gray-100 rounded-xl px-8 h-12 text-base font-bold shadow-lg inline-flex items-center justify-center cursor-pointer"
+              >
                 Позвонить нам
-              </Button>
+              </a>
               <Button className="bg-[#3b82f6] text-white hover:bg-[#2563eb] rounded-xl px-8 h-12 text-base font-bold shadow-lg border border-blue-400/30">
                 Написать email
               </Button>
@@ -100,17 +109,19 @@ export default function Hero({
                   className="object-cover"
                 />
               </div>
-              
+
               <div className="p-8 md:p-10 bg-white">
-                <h3 className="text-gray-900 font-bold text-xl mb-6">Преимущества платформы</h3>
-                
+                <h3 className="text-gray-900 font-bold text-xl mb-6">
+                  Преимущества платформы
+                </h3>
+
                 <ul className="space-y-3">
                   {[
                     "Быстрая окупаемость инвестиций",
                     "Гибкие тарифы под ваш бюджет",
                     "Полная техническая поддержка",
                     "Портал на русском и казахском языках",
-                    "Продвижение на двух языках — больше аудитории"
+                    "Продвижение на двух языках — больше аудитории",
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-[#10B981] shrink-0 mt-0.5" />
@@ -131,15 +142,14 @@ export default function Hero({
   if (variant === "about") {
     return (
       <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
-        {/* ... (код about без изменений) ... */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
           <div className="flex flex-col gap-6 text-white relative z-10">
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
               {title || "О проекте DentDoctor.kz"}
             </h1>
             <p className="text-blue-100 text-lg md:text-xl max-w-lg opacity-90 leading-relaxed">
-              {subtitle || "Платформа для поиска стоматологов с полными профилями, кейсами и отзывами"}
+              {subtitle ||
+                "Платформа для поиска стоматологов с полными профилями, кейсами и отзывами"}
             </p>
 
             <ul className="space-y-5 mt-4">
@@ -147,19 +157,25 @@ export default function Hero({
                 <div className="bg-[#10B981] rounded-full p-2 shrink-0">
                   <CheckCircle2 className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-base md:text-lg font-medium">Полные профили с кейсами и лицензиями</span>
+                <span className="text-base md:text-lg font-medium">
+                  Полные профили с кейсами и лицензиями
+                </span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="bg-[#10B981] rounded-full p-2 shrink-0">
                   <Users className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-base md:text-lg font-medium">Удобный поиск по направлениям</span>
+                <span className="text-base md:text-lg font-medium">
+                  Удобный поиск по направлениям
+                </span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="bg-[#10B981] rounded-full p-2 shrink-0">
                   <ShieldCheck className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-base md:text-lg font-medium">Реальные отзывы пациентов</span>
+                <span className="text-base md:text-lg font-medium">
+                  Реальные отзывы пациентов
+                </span>
               </li>
             </ul>
           </div>
@@ -174,33 +190,42 @@ export default function Hero({
                   className="object-cover"
                 />
               </div>
-              
+
               <div className="p-8 md:p-10 bg-white">
-                <h3 className="text-gray-900 font-bold text-xl mb-8">DentDoctor в цифрах</h3>
-                
+                <h3 className="text-gray-900 font-bold text-xl mb-8">
+                  DentDoctor в цифрах
+                </h3>
+
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="flex flex-col gap-1">
                     <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">
                       {stats?.doctors || 0}
                     </span>
-                    <span className="text-xs md:text-sm text-gray-500 font-medium">Врачей</span>
+                    <span className="text-xs md:text-sm text-gray-500 font-medium">
+                      Врачей
+                    </span>
                   </div>
                   <div className="flex flex-col gap-1 border-x border-gray-100">
                     <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">
                       {stats?.cities || 0}+
                     </span>
-                    <span className="text-xs md:text-sm text-gray-500 font-medium">Городов</span>
+                    <span className="text-xs md:text-sm text-gray-500 font-medium">
+                      Городов
+                    </span>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">100%</span>
-                    <span className="text-xs md:text-sm text-gray-500 font-medium">Качество</span>
+                    <span className="text-3xl md:text-4xl font-bold text-[#2563EB]">
+                      100%
+                    </span>
+                    <span className="text-xs md:text-sm text-gray-500 font-medium">
+                      Качество
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-        </div> 
+        </div>
       </section>
     );
   }
@@ -220,7 +245,8 @@ export default function Hero({
               {title || "Кейсы врачей"}
             </h1>
             <p className="text-blue-100 text-lg md:text-xl max-w-lg leading-relaxed opacity-90">
-              {subtitle || "Реальные результаты лечения наших специалистов. Фото до и после, описание процедур и стоимость."}
+              {subtitle ||
+                "Реальные результаты лечения наших специалистов. Фото до и после, описание процедур и стоимость."}
             </p>
 
             <ul className="space-y-4 mt-4">
@@ -241,16 +267,18 @@ export default function Hero({
             <div className="w-full max-w-[520px] bg-white rounded-[32px] overflow-hidden shadow-2xl">
               <div className="relative w-full h-[240px] md:h-[300px]">
                 <Image
-                  src="/images/cases_hero.png" 
+                  src="/images/cases_hero.png"
                   alt="Стоматологический кабинет"
                   fill
                   className="object-cover"
                 />
               </div>
-              
+
               <div className="p-8 md:p-10">
-                <h3 className="text-gray-900 font-bold text-xl mb-8">База кейсов</h3>
-                
+                <h3 className="text-gray-900 font-bold text-xl mb-8">
+                  База кейсов
+                </h3>
+
                 <div className="grid grid-cols-3 gap-4">
                   <div className="flex flex-col">
                     <span className="text-2xl md:text-3xl font-extrabold text-[#2563EB]">
@@ -260,7 +288,7 @@ export default function Hero({
                       Кейсов
                     </span>
                   </div>
-                  
+
                   <div className="flex flex-col border-x border-gray-100 px-4">
                     <span className="text-2xl md:text-3xl font-extrabold text-[#2563EB]">
                       {stats.doctors}
@@ -269,7 +297,7 @@ export default function Hero({
                       Врачей
                     </span>
                   </div>
-                  
+
                   <div className="flex flex-col items-end">
                     <span className="text-2xl md:text-3xl font-extrabold text-[#2563EB]">
                       {stats.successRate}
@@ -303,7 +331,8 @@ export default function Hero({
                 {title || "Блог"}
               </h1>
               <p className="text-blue-100 text-lg max-w-md">
-                {subtitle || "Полезные статьи о стоматологии, здоровье зубов и современных методах лечения"}
+                {subtitle ||
+                  "Полезные статьи о стоматологии, здоровье зубов и современных методах лечения"}
               </p>
             </div>
 
@@ -373,19 +402,24 @@ export default function Hero({
   if (variant === "doctor" && doctor) {
     const rawAddress = getLocalizedText(doctor.location?.address);
     const shortAddress = rawAddress ? rawAddress.split(",")[0] : null;
-    
+
     const cityId = doctor.location?.cityId;
     const cityObj = CITIES.find((c) => c.id === cityId);
     const cityName = cityObj ? cityObj.name[locale] : cityId || "";
 
-    const shortLocation = cityName && shortAddress 
-      ? `${cityName}, ${shortAddress}` 
-      : (cityName || shortAddress || null);
+    const shortLocation =
+      cityName && shortAddress
+        ? `${cityName}, ${shortAddress}`
+        : cityName || shortAddress || null;
 
-    const highlightText = getLocalizedText(doctor.shortDescription) || getLocalizedText(doctor.reasons?.[0]);
+    const highlightText =
+      getLocalizedText(doctor.shortDescription) ||
+      getLocalizedText(doctor.reasons?.[0]);
 
-    let cleanPhone = doctor.location?.phone ? doctor.location.phone.replace(/\D/g, "") : "";
-    
+    let cleanPhone = doctor.location?.phone
+      ? doctor.location.phone.replace(/\D/g, "")
+      : "";
+
     if (cleanPhone.startsWith("8") && cleanPhone.length === 11) {
       cleanPhone = "7" + cleanPhone.slice(1);
     }
@@ -417,36 +451,44 @@ export default function Hero({
             <div className="flex flex-wrap items-center gap-5 text-sm md:text-base opacity-95 mt-1">
               {doctor.experienceYears ? (
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4" /> 
+                  <Clock className="w-4 h-4" />
                   {tDoc("experience", { years: doctor.experienceYears })}
                 </span>
               ) : null}
 
               {shortLocation && (
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4" /> 
+                  <MapPin className="w-4 h-4" />
                   {shortLocation}
                 </span>
               )}
             </div>
             {highlightText && (
               <div className="bg-[#3A74F0] rounded-xl p-4 md:p-5 mt-2 max-w-xl">
-                <p className="font-medium text-sm md:text-base">{highlightText}</p>
+                <p className="font-medium text-sm md:text-base">
+                  {highlightText}
+                </p>
               </div>
             )}
             <div className="flex flex-wrap gap-3 mt-4">
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="block">
-                <Button className="bg-[#22c05c] text-white hover:bg-[#059669] rounded-xl px-5 h-11 text-sm font-semibold w-full sm:w-auto">
-                  <svg className="w-4 h-4 mr-2 fill-current" viewBox="0 0 24 24"><path d="M12.031 0C5.383 0 0 5.383 0 12.031c0 2.622.844 5.05 2.274 7.042L.38 24l5.06-1.884A11.964 11.964 0 0012.031 24c6.648 0 12.031-5.383 12.031-12.031C24.062 5.383 18.679 0 12.031 0zm0 22.015a9.927 9.927 0 01-5.1-1.4l-.365-.216-3.791 1.41.996-3.696-.237-.377A9.914 9.914 0 012.046 12.03c0-5.508 4.48-9.988 9.985-9.988s9.985 4.48 9.985 9.988-4.48 9.987-9.985 9.987z"/></svg>
-                  WhatsApp
-                </Button>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#22c05c] text-white hover:bg-[#059669] rounded-xl px-5 h-11 text-sm font-semibold w-full sm:w-auto inline-flex items-center justify-center cursor-pointer"
+              >
+                <svg className="w-4 h-4 mr-2 fill-current" viewBox="0 0 24 24">
+                  <path d="M12.031 0C5.383 0 0 5.383 0 12.031c0 2.622.844 5.05 2.274 7.042L.38 24l5.06-1.884A11.964 11.964 0 0012.031 24c6.648 0 12.031-5.383 12.031-12.031C24.062 5.383 18.679 0 12.031 0zm0 22.015a9.927 9.927 0 01-5.1-1.4l-.365-.216-3.791 1.41.996-3.696-.237-.377A9.914 9.914 0 012.046 12.03c0-5.508 4.48-9.988 9.985-9.988s9.985 4.48 9.985 9.988-4.48 9.987-9.985 9.987z" />
+                </svg>
+                WhatsApp
               </a>
 
-              <a href={phoneUrl} className="block">
-                <Button className="bg-[#4B84F1] hover:bg-[#3A74F0] text-white rounded-xl px-5 h-11 text-sm font-semibold w-full sm:w-auto">
-                  <Phone className="w-4 h-4 mr-2" />
-                  {tDoc("callButton")}
-                </Button>
+              <a
+                href={phoneUrl}
+                className="bg-[#4B84F1] hover:bg-[#3A74F0] text-white rounded-xl px-5 h-11 text-sm font-semibold w-full sm:w-auto inline-flex items-center justify-center cursor-pointer"
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                {tDoc("callButton")}
               </a>
             </div>
           </div>
@@ -471,7 +513,6 @@ export default function Hero({
           </div>
 
           <SearchWidget />
-
         </div>
 
         <div className="flex justify-center lg:justify-end w-full mt-8 lg:mt-0 relative z-10">

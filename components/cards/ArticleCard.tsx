@@ -32,7 +32,8 @@ export default function ArticleCard({
 
   return (
     <div className="flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all h-full border border-gray-100">
-      <div className="relative h-[200px] w-full shrink-0">
+      {/* ИЗМЕНЕНИЯ ЗДЕСЬ: убрали h-[200px], добавили aspect-[2560/1695] */}
+      <div className="relative w-full aspect-[2560/1695] shrink-0">
         <Image src={image} alt={title} fill className="object-cover" />
       </div>
 

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Clock, MapPin, ArrowRight } from "lucide-react";
+import { Star, Clock, MapPin, ArrowRight, Eye } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export interface DoctorCardProps {
@@ -21,6 +21,7 @@ export interface DoctorCardProps {
   } | null;
   price: number;
   pricePrefix?: string;
+  views?: number;
   lang?: "ru" | "kz";
 }
 
@@ -40,6 +41,7 @@ export default function DoctorCard({
   price,
   pricePrefix,
   lang = "ru",
+  views,
 }: DoctorCardProps) {
   const t = useTranslations("HomePage.TopDoctors.DoctorCard");
 
@@ -89,6 +91,12 @@ export default function DoctorCard({
             <span className="text-sm text-gray-500">
               {reviewsCount} {t("reviews")}
             </span>
+          )}
+          {views !== undefined && (
+            <div className="flex items-center gap-1.5 text-sm text-gray-500">
+              <Eye className="w-4 h-4 text-gray-400" />
+              <span>{views}</span>
+            </div>
           )}
         </div>
         <div className="flex items-center gap-5 mb-5 text-sm text-gray-500">

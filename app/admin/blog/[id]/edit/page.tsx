@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { getContentById } from "@/lib/firestore/content";
+import { getContentById } from "@/lib/firestore/client-content";
 import { ContentForm } from "@/components/admin/content-form";
 
 interface PageProps {

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { getDashboardStats, getAdminContent, getTopDoctorsIds, updateTopDoctorsIds, getCategories, saveCategories } from "@/lib/firestore/content";
+import { getDashboardStats, getAdminContent, getTopDoctorsIds, updateTopDoctorsIds, getCategories, saveCategories } from "@/lib/firestore/client-content";
 import { StatCard } from "@/components/admin/stat-card";
 import { FileText, Briefcase, Users } from "lucide-react";
 import { DoctorProfile, DoctorCategory } from "@/lib/firestore/types";

@@ -3,16 +3,38 @@ import { PromoBanner } from "@/components/banners/promo-banner";
 import DoctorCard from "@/components/cards/DoctorCard";
 import PromoCard from "@/components/cards/PromoCard";
 import { Star, Tags, TrendingUp } from "lucide-react";
+import { Metadata } from 'next';
 import {
   getTopDoctorsIds,
   getContentById,
   getPublishedContent,
   getCategories,
-} from "@/lib/firestore/content";
+} from "@/lib/firestore/client-content";
 import { DoctorProfile } from "@/lib/firestore/types";
 import Hero from "@/components/Hero";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const lang = locale === "kz" ? "kz" : "ru";
+
+  if (lang === "ru") {
+    return {
+      title: "Лечение зубов. Стоматологи. Cтоматологические клиники - DentDoctor.kz",
+      description: "Ищете стоматолога? DentDoctor.kz — реальные кейсы, отзывы пациентов, цены и лицензии врачей. Сравните и выберите специалиста онлайн за 2 минуты.",
+    };
+  } else {
+    return {
+      title: "Тіс емдеу. Стоматологтар. Стоматологиялық клиникалар - DentDoctor.kz",
+      description: "Стоматолог іздеп жүрсіз бе? DentDoctor.kz — нақты мысалдар, пациенттердің пікірлері, бағалар және дәрігерлердің лицензиялары. 2 минут ішінде маманды онлайн салыстырып, таңдаңыз.",
+    };
+  }
+}
 
 export default async function HomePage({
   params,
@@ -252,6 +274,7 @@ export default async function HomePage({
                           doctor.shortDescription?.[lang] ||
                           doctor.reasons?.[0]?.[lang]
                         }
+                        views={doctor.views}
                         quote={reviewSnippet}
                         lang={lang as "ru" | "kz"}
                       />

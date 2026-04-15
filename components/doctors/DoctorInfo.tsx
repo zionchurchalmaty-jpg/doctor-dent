@@ -2,8 +2,23 @@
 
 import { useTranslations, useLocale } from "next-intl";
 import { DoctorProfile } from "@/lib/firestore/types";
-import { CheckCircle2, Play } from "lucide-react";
-import Image from "next/image";
+import { CheckCircle2, PlayCircle } from "lucide-react";
+
+const getYouTubeEmbedUrl = (url?: string) => {
+  if (!url) return null;
+  try {
+    const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/i;
+    const match = url.match(regExp);
+    const videoId = match ? match[1] : null;
+
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+  } catch (e) {
+    console.error("Ошибка парсинга видео", e);
+  }
+  return null;
+};
 
 export function DoctorInfo({ doctor }: { doctor: DoctorProfile }) {
   const t = useTranslations("DoctorProfile");
@@ -13,6 +28,8 @@ export function DoctorInfo({ doctor }: { doctor: DoctorProfile }) {
     if (!textField) return "";
     return textField[locale] || textField["ru"] || "";
   };
+
+  const embedUrl = getYouTubeEmbedUrl(doctor.videoUrl);
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-12 space-y-16">
@@ -33,15 +50,34 @@ export function DoctorInfo({ doctor }: { doctor: DoctorProfile }) {
 
       {doctor.videoUrl && (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">{t("videoTitle")}</h2>
-          <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg group cursor-pointer bg-gray-900">
-             <Image src={doctor.photo || "/images/placeholder.png"} alt="Video Thumbnail" fill className="object-cover opacity-60 group-hover:opacity-40 transition-opacity" />
-             <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-16 h-12 bg-red-600 rounded-xl flex items-center justify-center">
-                   <Play className="w-6 h-6 text-white fill-current" />
-                </div>
-             </div>
-          </div>
+          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <PlayCircle className="w-7 h-7 text-[#2563EB]" />
+            {t("videoTitle")}
+          </h2>
+          
+          {embedUrl ? (
+            <div className="bg-white rounded-3xl p-2 md:p-4 shadow-sm border border-gray-100">
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
+                <iframe
+                  src={embedUrl}
+                  title="Видео визитка врача"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute top-0 left-0 w-full h-full border-0"
+                ></iframe>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={doctor.videoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#2563EB] text-white px-8 py-4 rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-sm"
+            >
+              <PlayCircle className="w-5 h-5" />
+              Смотреть видео
+            </a>
+          )}
         </div>
       )}
 

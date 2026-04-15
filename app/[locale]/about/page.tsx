@@ -3,7 +3,7 @@ import { ImportantInfo } from "@/components/about/ImportantInfo";
 import { Mission } from "@/components/about/Mission";
 import { WhoWeAre } from "@/components/about/WhoWeAre";
 import Hero from "@/components/Hero"; 
-import { getPublishedContent } from "@/lib/firestore/content";
+import { getPublishedContent } from "@/lib/firestore/client-content";
 
 export const revalidate = 3600; 
 

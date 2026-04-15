@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getContentBySlug, getContentById } from "@/lib/firestore/content";
+import { getContentBySlug, getContentById } from "@/lib/firestore/client-content";
 import { DoctorProfile } from "@/lib/firestore/types";
 import { setRequestLocale } from "next-intl/server";
 import Hero from "@/components/Hero";
@@ -8,6 +8,7 @@ import { DoctorExperience } from "@/components/doctors/DoctorExperience";
 import { DoctorShowcase } from "@/components/doctors/DoctorShowcase";
 import { DoctorPricesFaq } from "@/components/doctors/DoctorPricesFaq";
 import { DoctorFooter } from "@/components/doctors/DoctorFooter";
+import { ViewTracker } from "@/components/doctors/ViewTracker";
 
 interface DoctorPageProps {
   params: Promise<{
@@ -50,6 +51,7 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
   return (
 
     <main className="min-h-screen bg-white pb-20">
+      <ViewTracker doctorId={doctor.id} />
       <Hero variant="doctor" doctor={doctor} />
       <DoctorInfo doctor={doctor} />
       <DoctorExperience doctor={doctor} />

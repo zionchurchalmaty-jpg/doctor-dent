@@ -21,7 +21,7 @@ import {
   createContent,
   updateContent,
   deleteContent,
-} from "@/lib/firestore/content";
+} from "@/lib/firestore/client-content";
 import type {
   Content,
   ContentInput,

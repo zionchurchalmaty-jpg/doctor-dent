@@ -64,6 +64,7 @@ export default async function SearchPage({
                   location={
                     doc.location?.address?.[locale]?.split(",")[0] || "Алматы"
                   }
+                  views={doc.views}
                   shortDescription={
                     doc.shortDescription?.[locale] || doc.reasons?.[0]?.[locale]
                   }

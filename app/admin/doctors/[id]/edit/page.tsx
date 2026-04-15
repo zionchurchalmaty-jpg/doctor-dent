@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { getContentById, serializeFirebaseData } from "@/lib/firestore/content";
+import { getContentById, serializeFirebaseData } from "@/lib/firestore/client-content";
 import { DoctorForm } from "@/components/admin/doctor-form";
 
 interface PageProps {
