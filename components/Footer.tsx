@@ -34,7 +34,7 @@ export default function Footer() {
             <li><Link href={`/${locale}/cases`} className="hover:text-white transition">{t('cases')}</Link></li>
             <li><Link href={`/${locale}/blog`} className="hover:text-white transition">{t('blog')}</Link></li>
             <li><Link href={`/${locale}/about`} className="hover:text-white transition">{t('about')}</Link></li>
-            <li><Link href={`/${locale}/guide`} className="hover:text-white transition">{t('howToChoose')}</Link></li>
+            <li><Link href={`/${locale}/seo-blog`} className="hover:text-white transition">{t('seo-blog')}</Link></li>
           </ul>
         </div>
 
@@ -51,8 +51,13 @@ export default function Footer() {
           <h4 className="font-semibold mb-6 text-white">{t('contactsTitle')}</h4>
           <ul className="space-y-4 text-slate-400 text-sm">
             <li className="flex items-center gap-3">
-              <Phone className="w-4 h-4" />
-              <span>+7 (705) 279-30-78</span>
+<a 
+  href="tel:+77052793078" 
+  className="flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer"
+>
+  <Phone className="w-4 h-4" />
+  <span>+7 (705) 279-30-78</span>
+</a>
             </li>
             <li className="flex items-center gap-3">
               <Mail className="w-4 h-4" />

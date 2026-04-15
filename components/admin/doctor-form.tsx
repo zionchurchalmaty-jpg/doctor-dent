@@ -12,7 +12,7 @@ import {
 
 import { useAuth } from "./auth-provider";
 
-import { createContent, updateContent, syncDoctorCases, generateSlug } from "@/lib/firestore/content";
+import { createContent, updateContent, syncDoctorCases, generateSlug } from "@/lib/firestore/client-content";
 
 import { DoctorBasicTab } from "./doctor-tabs/basic-tab";
 import { DoctorBenefitsTab } from "./doctor-tabs/benefits-tab";

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ContentList } from "@/components/admin/content-list";
-import { deleteContent } from "@/lib/firestore/content";
+import { deleteContent } from "@/lib/firestore/client-content";
 import { SerializedContent, ContentType } from "@/lib/firestore/types";
 import { Plus } from "lucide-react";
 import Link from "next/link";

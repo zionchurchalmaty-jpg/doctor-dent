@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import CasesClient from "@/components/cases/CasesClient";
-import { getPublishedContent } from "@/lib/firestore/content";
+import { getPublishedContent } from "@/lib/firestore/client-content";
 import { DoctorProfile } from "@/lib/firestore/types";
 
 export const dynamic = "force-dynamic";

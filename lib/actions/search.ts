@@ -1,6 +1,6 @@
 "use server";
 
-import { getPublishedContent } from "@/lib/firestore/content";
+import { getPublishedContent } from "@/lib/firestore/client-content";
 import { DoctorProfile } from "@/lib/firestore/types";
 
 export async function getSearchFilters(locale: "ru" | "kz") {

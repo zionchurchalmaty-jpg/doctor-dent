@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getContentBySlug } from "@/lib/firestore/content";
+import { getContentBySlug } from "@/lib/firestore/client-content";
 import Image from "next/image";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -79,8 +79,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
         </div>
 
-        <article className="max-w-4xl mx-auto px-6">
-          
+        <div className="max-w-4xl mx-auto px-6 mb-10">
           <div className="flex items-center gap-4 mb-6">
             {firstTag && (
               <span className="bg-[#EFF6FF] text-[#2563EB] px-3 py-1 rounded-md text-xs font-semibold tracking-wide">
@@ -93,25 +92,27 @@ export default async function BlogPostPage({ params }: PageProps) {
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-10 leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
             {article.title}
           </h1>
+        </div>
 
-          {article.image && (
-            <figure className="mb-12">
-              <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
-                <Image
-                  src={article.image}
-                  alt={article.seo?.imageAlt || article.title}
-                  title={article.seo?.imageTitle}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
+        {article.image && (
+          <div className="max-w-5xl mx-auto px-6 mb-12">
+            <figure className="relative w-full aspect-[2560/1695] rounded-2xl overflow-hidden bg-[#F8F9FA] shadow-sm">
+              <Image
+                src={article.image}
+                alt={article.seo?.imageAlt || article.title}
+                title={article.seo?.imageTitle}
+                fill
+                className="object-contain" 
+                priority
+              />
             </figure>
-          )}
+          </div>
+        )}
 
+        <article className="max-w-4xl mx-auto px-6">
           {article.content && (
             <div 
               className="prose prose-lg max-w-none text-gray-800 prose-headings:font-bold prose-headings:text-gray-900 prose-a:text-[#2563EB]"

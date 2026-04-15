@@ -7,7 +7,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Save, Loader2, UploadCloud, X } from "lucide-react";
 import { useAuth } from "./auth-provider";
-import { createContent, updateContent, getPublishedContent } from "@/lib/firestore/content";
+import { createContent, updateContent, getPublishedContent } from "@/lib/firestore/client-content";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 

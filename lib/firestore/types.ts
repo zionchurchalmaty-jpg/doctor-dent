@@ -78,6 +78,7 @@ export interface DoctorProfile {
   shortDescription?: LocalizedText;
   experienceYears: number;
   categoryId?: string;
+  views?: number;
   
   reasons: LocalizedText[]; 
   services: LocalizedText[];

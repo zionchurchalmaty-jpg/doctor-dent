@@ -1,4 +1,4 @@
-import { getAdminContent } from "@/lib/firestore/content";
+import { getAdminContent } from "@/lib/firestore/client-content";
 import { ContentManager } from "@/components/admin/content-manager";
 import { SerializedContent } from "@/lib/firestore/types";
 import { Metadata } from "next";

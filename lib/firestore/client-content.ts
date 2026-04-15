@@ -1,0 +1,365 @@
+import {
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit,
+  Timestamp,
+  setDoc,
+  writeBatch,
+  increment,
+  getCountFromServer,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import type {
+  ContentInput,
+  ContentType,
+  Content,
+  DoctorCategory,
+  DoctorProfile,
+} from "./types";
+import slugify from "slugify";
+
+export const COLLECTION_MAP: Record<ContentType, string> = {
+  blog: "articles",
+  cases: "cases",
+  doctors: "doctors",
+  promos: "promos",
+};
+
+export const PLACEHOLDERS: Record<ContentType, string> = {
+  blog: "/images/blog-placeholder.png",
+  cases: "/images/case-placeholder.png",
+  doctors: "/images/doctor-placeholder.png",
+  promos: "/images/promo-placeholder.png",
+};
+
+export function generateSlug(title: string): string {
+  return slugify(title, { lower: true, strict: true, locale: "ru" });
+}
+
+export function getPlaceholder(type: ContentType, isSeo?: boolean): string {
+  if (type === "blog" && isSeo) return "/images/seo-placeholder.png";
+  return PLACEHOLDERS[type] || "/images/placeholder.png";
+}
+
+export function getCollection(contentType: ContentType): string {
+  return COLLECTION_MAP[contentType] ?? "articles";
+}
+
+export function serializeFirebaseData(data: any): any {
+  if (data === null || data === undefined) return null;
+
+  if (Array.isArray(data)) {
+    return data.map((item) => serializeFirebaseData(item));
+  }
+
+  if (typeof data === "object") {
+    if (typeof data.toDate === "function") {
+      return data.toDate().toISOString();
+    }
+    if ("seconds" in data && "nanoseconds" in data) {
+      return new Date(data.seconds * 1000).toISOString();
+    }
+    if ("_seconds" in data && "_nanoseconds" in data) {
+      return new Date(data._seconds * 1000).toISOString();
+    }
+
+    const result: any = {};
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        result[key] = serializeFirebaseData(data[key]);
+      }
+    }
+    return result;
+  }
+
+  return data;
+}
+
+export function toFirestoreData(
+  input: any,
+  authorId: string,
+  authorName: string,
+) {
+  const now = Timestamp.now();
+  const mainImageUrl =
+    input.photo ||
+    input.image ||
+    getPlaceholder(input.contentType, input.isSeo);
+  const titleText =
+    input.title || input.name?.ru || input.name?.kz || "untitled";
+  const slug = generateSlug(titleText);
+
+  return {
+    ...input,
+    slug,
+    isSeo: input.isSeo ?? false,
+    image: mainImageUrl,
+    seo: {
+      metaTitle: input.seo?.metaTitle || "",
+      metaDescription: input.seo?.metaDescription || "",
+      ogImage: mainImageUrl,
+      canonicalUrl: input.seo?.canonicalUrl || "",
+      noIndex: input.seo?.noIndex || false,
+      schemaMarkup: input.seo?.schemaMarkup || "",
+      imageAlt: input.seo?.imageAlt || "",
+      imageTitle: input.seo?.imageTitle || "",
+      imageDescription: input.seo?.imageDescription || "",
+    },
+    date: input.date || now,
+    updatedAt: now,
+    createdBy: authorId,
+    authorName,
+  };
+}
+
+export async function incrementDoctorViews(id: string): Promise<void> {
+  if (!id) return;
+  const ref = doc(db, "doctors", id);
+  await updateDoc(ref, { views: increment(1) });
+}
+
+export async function getTopDoctorsIds(): Promise<string[]> {
+  const snap = await getDoc(doc(db, "settings", "general"));
+  return snap.exists()
+    ? snap.data()?.topDoctorsIds || ["", "", ""]
+    : ["", "", ""];
+}
+
+export async function updateTopDoctorsIds(newIds: string[]): Promise<void> {
+  const ref = doc(db, "settings", "general");
+  await setDoc(ref, { topDoctorsIds: newIds }, { merge: true });
+}
+
+export async function createContent(
+  input: any,
+  authorId: string,
+  authorName: string,
+): Promise<string> {
+  const coll = getCollection(input.contentType);
+  const data = toFirestoreData(input, authorId, authorName);
+  const ref = await addDoc(collection(db, coll), {
+    ...data,
+    createdAt: data.date,
+  });
+  return ref.id;
+}
+
+export async function updateContent(id: string, input: any): Promise<void> {
+  const coll = getCollection(input.contentType);
+  const ref = doc(db, coll, id);
+  const existing = await getDoc(ref);
+  if (!existing.exists()) throw new Error("Document not found");
+
+  const mainImageUrl =
+    input.photo ||
+    input.image ||
+    getPlaceholder(input.contentType, input.isSeo);
+  const titleText =
+    input.title || input.name?.ru || input.name?.kz || "untitled";
+  const slug = generateSlug(titleText);
+
+  await updateDoc(ref, {
+    ...input,
+    slug,
+    isSeo: input.isSeo ?? false,
+    image: mainImageUrl,
+    seo: {
+      ...(input.seo ?? existing.data()?.seo),
+      ogImage: mainImageUrl,
+      schemaMarkup:
+        input.seo?.schemaMarkup || existing.data()?.seo?.schemaMarkup || "",
+    },
+    updatedAt: Timestamp.now(),
+  });
+}
+
+export async function deleteContent(
+  id: string,
+  contentType?: ContentType,
+): Promise<void> {
+  if (contentType) {
+    const coll = getCollection(contentType);
+    const ref = doc(db, coll, id);
+    if ((await getDoc(ref)).exists()) {
+      await deleteDoc(ref);
+      return;
+    }
+  }
+  for (const c of ["articles", "cases", "doctors", "promos"]) {
+    const ref = doc(db, c, id);
+    if ((await getDoc(ref)).exists()) {
+      await deleteDoc(ref);
+      return;
+    }
+  }
+  throw new Error("Document not found");
+}
+
+export async function getPublishedContent(
+  type: ContentType,
+  limitCount?: number,
+): Promise<Content[]> {
+  const collName = getCollection(type);
+  let q = query(
+    collection(db, collName),
+    where("status", "==", "published"),
+    orderBy("date", "desc"),
+  );
+  if (limitCount) q = query(q, limit(limitCount));
+  const snapshot = await getDocs(q);
+  const rawData = snapshot.docs.map((d) => ({
+    id: d.id,
+    contentType: type,
+    ...d.data(),
+  }));
+  return serializeFirebaseData(rawData) as Content[];
+}
+
+export async function getContentById(
+  id: string,
+  type: ContentType,
+  includeDrafts: boolean = false,
+): Promise<Content | null> {
+  if (!id || typeof id !== "string") return null;
+  const collName = getCollection(type);
+  const snap = await getDoc(doc(db, collName, id));
+  if (!snap.exists()) return null;
+  const data = snap.data();
+  if (!includeDrafts && data.status === "draft") return null;
+  const rawData = { id: snap.id, contentType: type, ...data };
+  return serializeFirebaseData(rawData) as Content;
+}
+
+export async function getContentBySlug(
+  slug: string,
+  type: ContentType,
+  includeDrafts: boolean = false,
+): Promise<Content | null> {
+  if (!slug || typeof slug !== "string") return null;
+  const collName = getCollection(type);
+  let q = query(collection(db, collName), where("slug", "==", slug));
+  if (!includeDrafts) q = query(q, where("status", "==", "published"));
+  q = query(q, limit(1));
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) return null;
+  const docSnap = snapshot.docs[0];
+  const rawData = { id: docSnap.id, contentType: type, ...docSnap.data() };
+  return serializeFirebaseData(rawData) as Content;
+}
+
+export async function getAdminContent(type: ContentType): Promise<Content[]> {
+  const collName = getCollection(type);
+  const q = query(collection(db, collName), orderBy("date", "desc"));
+  const snapshot = await getDocs(q);
+  const rawData = snapshot.docs.map((d) => ({
+    id: d.id,
+    contentType: type,
+    ...d.data(),
+  }));
+  return serializeFirebaseData(rawData) as Content[];
+}
+
+export async function getDashboardStats() {
+  const [articlesSnap, casesSnap] = await Promise.all([
+    getCountFromServer(collection(db, "articles")),
+    getCountFromServer(collection(db, "cases")),
+  ]);
+  return {
+    articlesCount: articlesSnap.data().count,
+    casesCount: casesSnap.data().count,
+  };
+}
+
+export async function getMainDoctorId(): Promise<string | null> {
+  const snap = await getDoc(doc(db, "settings", "general"));
+  return snap.exists() ? snap.data()?.mainDoctorId : null;
+}
+
+export async function getCategories(): Promise<DoctorCategory[]> {
+  const snap = await getDoc(doc(db, "settings", "categories"));
+  return snap.exists() ? snap.data()?.items || [] : [];
+}
+
+export async function saveCategories(
+  categories: DoctorCategory[],
+): Promise<void> {
+  const ref = doc(db, "settings", "categories");
+  await setDoc(ref, { items: categories }, { merge: true });
+}
+
+export async function getDoctorsByCategory(
+  categoryId: string,
+): Promise<DoctorProfile[]> {
+  const q = query(
+    collection(db, "doctors"),
+    where("status", "==", "published"),
+    where("categoryId", "==", categoryId),
+  );
+  const snapshot = await getDocs(q);
+  const rawData = snapshot.docs.map((d) => ({
+    id: d.id,
+    contentType: "doctors",
+    ...d.data(),
+  }));
+  return serializeFirebaseData(rawData) as DoctorProfile[];
+}
+
+export async function syncDoctorCases(
+  doctorId: string,
+  doctorSlug: string,
+  doctorName: any,
+  formCases: any[],
+) {
+  const casesRef = collection(db, "cases");
+  const batch = writeBatch(db);
+
+  const q = query(casesRef, where("doctorId", "==", doctorId));
+  const snapshot = await getDocs(q);
+  const existingCasesIds = snapshot.docs.map((d) => d.id);
+  const formCasesIds: string[] = [];
+  const safeFormCases = Array.isArray(formCases) ? formCases : [];
+
+  for (const caseItem of safeFormCases) {
+    const titleText =
+      caseItem.title?.ru || caseItem.title?.kz || "untitled-case";
+    const slug = generateSlug(titleText);
+    const caseData = {
+      ...caseItem,
+      slug,
+      doctorSlug,
+      doctorId,
+      doctorName: doctorName || { ru: "", kz: "" },
+      contentType: "cases",
+      status: "published",
+      updatedAt: Timestamp.now(),
+      date: Timestamp.now(),
+    };
+
+    if (caseItem.id) {
+      formCasesIds.push(caseItem.id);
+      batch.update(doc(db, "cases", caseItem.id), caseData);
+    } else {
+      const { id, ...dataWithoutId } = caseData;
+      const newDocRef = doc(collection(db, "cases"));
+      batch.set(newDocRef, { ...dataWithoutId, createdAt: Timestamp.now() });
+      formCasesIds.push(newDocRef.id);
+    }
+  }
+
+  const casesToDelete = existingCasesIds.filter(
+    (id) => !formCasesIds.includes(id),
+  );
+  for (const idToDelete of casesToDelete) {
+    batch.delete(doc(db, "cases", idToDelete));
+  }
+
+  await batch.commit();
+}

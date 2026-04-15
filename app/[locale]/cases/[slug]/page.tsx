@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getContentBySlug, getContentById } from "@/lib/firestore/content";
+import { getContentBySlug, getContentById } from "@/lib/firestore/client-content";
 import Image from "next/image";
 import { Metadata } from "next";
 import Link from "next/link";

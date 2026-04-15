@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PromoForm } from "@/components/admin/promo-form";
-import { getContentById } from "@/lib/firestore/content";
+import { getContentById } from "@/lib/firestore/client-content";
 
 export const metadata: Metadata = {
   title: "Редактирование акции | Админка",
