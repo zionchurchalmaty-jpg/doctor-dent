@@ -6,10 +6,31 @@ import Link from "next/link";
 import { Phone, Menu, X } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const t = useTranslations("Navbar");
   const locale = useLocale();
+  const pathname = usePathname();
+
+  // 1. Разбиваем путь на части и убираем пустые
+  const segments = pathname.split('/').filter(Boolean);
+
+  // 2. Убираем локаль (ru/kz) из начала, чтобы проверять чистый путь
+  const isLocale = segments[0] === 'ru' || segments[0] === 'kz';
+  const pathSegments = isLocale ? segments.slice(1) : segments;
+
+  // 3. Проверяем нужные условия:
+  // - Начинается ли с /blog (покрывает /blog и /blog/[slug]) или /seo-blog
+  const isBlogOrSeoBlog = pathSegments[0] === 'blog' || pathSegments[0] === 'seo-blog';
+
+  // - Является ли это корневым /[slug]? 
+  // (Ровно 1 сегмент после языка, и это НЕ один из системных роутов)
+  const coreRoutes = ['doctors', 'search', 'about', 'cases', 'for-doctors', 'admin'];
+  const isRootSlug = pathSegments.length === 1 && !coreRoutes.includes(pathSegments[0]);
+
+  // 4. Скрываем переключатель, если выполнилось любое из условий
+  const shouldHideLanguageSwitcher = isBlogOrSeoBlog || isRootSlug;
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -47,9 +68,9 @@ export default function Navbar() {
         <Link href={`/cases`} className="hover:text-blue-600 transition-colors">
           {t("cases")}
         </Link>
-        <Link href={`/blog`} className="hover:text-blue-600 transition-colors">
+        <a href={`/ru/blog`} className="hover:text-blue-600 transition-colors">
           {t("blog")}
-        </Link>
+        </a>
         <Link
           href={`/${locale}/about`}
           className="hover:text-blue-600 transition-colors"
@@ -59,7 +80,7 @@ export default function Navbar() {
       </nav>
 
       <div className="flex items-center gap-3 md:gap-6">
-        <LanguageSwitcher />
+        {!shouldHideLanguageSwitcher && <LanguageSwitcher />}
 
         <div className="hidden lg:flex items-center gap-6">
           <Button

@@ -1,6 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import { getDashboardStats, getAdminContent, getTopDoctorsIds, updateTopDoctorsIds, getCategories, saveCategories } from "@/lib/firestore/client-content";
+import { 
+  getDashboardStats, 
+  getAdminContent, 
+  getTopDoctorsIds, 
+  getCategories 
+} from "@/lib/firestore/client-content";
 import { StatCard } from "@/components/admin/stat-card";
 import { FileText, Briefcase, Users } from "lucide-react";
 import { DoctorProfile, DoctorCategory } from "@/lib/firestore/types";
@@ -19,16 +24,6 @@ export default async function AdminDashboardPage() {
 
   const doctors = doctorsRaw as unknown as DoctorProfile[];
 
-  const saveTopDoctors = async (newIds: string[]) => {
-    "use server";
-    await updateTopDoctorsIds(newIds);
-  };
-
-  const handleSaveCategories = async (newCats: DoctorCategory[]) => {
-    "use server";
-    await saveCategories(newCats);
-  };
-
   return (
     <div className="space-y-8">
       <div>
@@ -39,12 +34,10 @@ export default async function AdminDashboardPage() {
       <TopDoctorsManager 
         allDoctors={doctors} 
         initialTopIds={topIdsRaw} 
-        onSave={saveTopDoctors} 
       />
 
       <CategoriesManager 
         initialCategories={initialCategories} 
-        onSave={handleSaveCategories} 
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -3,14 +3,16 @@
 import { useState } from "react";
 import { DoctorCategory } from "@/lib/firestore/types";
 import { Plus, Trash2, Save } from "lucide-react";
+import { saveCategories } from "@/lib/firestore/client-content";
+import { useRouter } from "next/navigation";
 
 export function CategoriesManager({
   initialCategories,
-  onSave,
 }: {
   initialCategories: DoctorCategory[];
-  onSave: (cats: DoctorCategory[]) => Promise<void>;
 }) {
+  const router = useRouter();
+  
   const [categories, setCategories] = useState<DoctorCategory[]>(initialCategories || []);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -38,10 +40,10 @@ export function CategoriesManager({
   };
 
   const updateCategoryPrice = (id: string, value: string) => {
-  setCategories((prev) =>
-    prev.map((cat) => (cat.id === id ? { ...cat, basePrice: Number(value) } : cat))
-  );
-};
+    setCategories((prev) =>
+      prev.map((cat) => (cat.id === id ? { ...cat, basePrice: Number(value) } : cat))
+    );
+  };
 
   const removeCategory = (id: string) => {
     setCategories(categories.filter((c) => c.id !== id));
@@ -49,9 +51,16 @@ export function CategoriesManager({
 
   const handleSave = async () => {
     setIsSaving(true);
-    await onSave(categories);
-    setIsSaving(false);
-    alert("Категории сохранены!");
+    try {
+      await saveCategories(categories);
+      alert("Категории сохранены!");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка при сохранении");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -111,15 +120,15 @@ export function CategoriesManager({
                 />
               </div>
               <div>
-  <label className="block text-xs text-gray-500 mb-1">Примерная стоимость (₸, от)</label>
-  <input
-    type="number"
-    value={cat.basePrice || ""}
-    onChange={(e) => updateCategoryPrice(cat.id, e.target.value)}
-    className="w-full border rounded-md p-2 text-sm"
-    placeholder="150000"
-  />
-</div>
+                <label className="block text-xs text-gray-500 mb-1">Примерная стоимость (₸, от)</label>
+                <input
+                  type="number"
+                  value={cat.basePrice || ""}
+                  onChange={(e) => updateCategoryPrice(cat.id, e.target.value)}
+                  className="w-full border rounded-md p-2 text-sm"
+                  placeholder="150000"
+                />
+              </div>
             </div>
           </div>
         ))}
