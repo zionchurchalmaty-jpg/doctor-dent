@@ -6,13 +6,18 @@ import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
 
 interface PageProps {
-  params: Promise<{ locale: string; slug: string }>;
+  params: Promise<{ slug: string; locale: string }>; 
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+
+  if (locale === "kz") {
+    notFound();
+  }
+
   const article = await getContentBySlug(slug, "blog");
 
   if (!article) return { title: "Статья не найдена" };
@@ -36,6 +41,10 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug, locale } = await params;
+
+  if (locale === "kz") {
+    notFound();
+  }
 
   const article = await getContentBySlug(slug, "blog");
 
@@ -70,7 +79,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="border-b border-gray-100 mb-10 pb-4">
           <div className="max-w-4xl mx-auto px-6">
             <Link
-              href={`/blog`}
+              href={`/seo-blog`}
               className="inline-flex items-center text-sm font-medium text-[#2563EB] hover:text-blue-800 transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />

@@ -4,11 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import { Trophy, Save, User } from "lucide-react";
 import { DoctorProfile } from "@/lib/firestore/types";
+import { updateTopDoctorsIds } from "@/lib/firestore/client-content";
+import { useRouter } from "next/navigation";
 
 interface TopDoctorsManagerProps {
   allDoctors: DoctorProfile[];
   initialTopIds: string[];
-  onSave: (newTopIds: string[]) => Promise<void>;
 }
 
 const RANK_COLORS = [
@@ -20,8 +21,9 @@ const RANK_COLORS = [
 export function TopDoctorsManager({
   allDoctors,
   initialTopIds,
-  onSave,
 }: TopDoctorsManagerProps) {
+  const router = useRouter();
+  
   const [selectedIds, setSelectedIds] = useState<string[]>([
     initialTopIds[0] || "",
     initialTopIds[1] || "",
@@ -38,8 +40,9 @@ export function TopDoctorsManager({
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await onSave(selectedIds);
+      await updateTopDoctorsIds(selectedIds);
       alert("ТОП врачи успешно обновлены!");
+      router.refresh();
     } catch (error) {
       console.error(error);
       alert("Ошибка при сохранении");

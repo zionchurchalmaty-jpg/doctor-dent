@@ -34,7 +34,7 @@ export default function Footer() {
             <li><Link href={`/${locale}/cases`} className="hover:text-white transition">{t('cases')}</Link></li>
             <li><Link href={`/${locale}/blog`} className="hover:text-white transition">{t('blog')}</Link></li>
             <li><Link href={`/${locale}/about`} className="hover:text-white transition">{t('about')}</Link></li>
-            <li><Link href={`/${locale}/seo-blog`} className="hover:text-white transition">{t('seo-blog')}</Link></li>
+            <li><a href={`/ru/seo-blog`} className="hover:text-white transition">{t('seo-blog')}</a></li>
           </ul>
         </div>
 
