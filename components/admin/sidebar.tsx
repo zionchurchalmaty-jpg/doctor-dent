@@ -51,7 +51,7 @@ export function AdminSidebar() {
           <div className="w-7 h-7 bg-[#1A73E8] rounded-lg flex items-center justify-center text-white text-sm">
             D
           </div>
-          DentDoctor
+          FindDoctor
         </Link>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -84,7 +84,7 @@ export function AdminSidebar() {
             <div className="w-8 h-8 bg-[#1A73E8] rounded-lg flex items-center justify-center text-white text-lg">
               D
             </div>
-            DentDoctor
+            FindDoctor
           </Link>
         </div>
 

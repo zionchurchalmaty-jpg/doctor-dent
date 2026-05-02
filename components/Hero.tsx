@@ -52,7 +52,7 @@ export default function Hero({
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col gap-6 text-white relative z-10">
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
-              {title || "Арендуйте персональную страницу на DentDoctor.kz"}
+              {title || "Арендуйте персональную страницу на FindDoctor.kz"}
             </h1>
             <p className="text-blue-100 text-lg md:text-xl max-w-lg opacity-90">
               {subtitle ||
@@ -145,7 +145,7 @@ export default function Hero({
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col gap-6 text-white relative z-10">
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
-              {title || "О проекте DentDoctor.kz"}
+              {title || "О проекте FindDoctor.kz"}
             </h1>
             <p className="text-blue-100 text-lg md:text-xl max-w-lg opacity-90 leading-relaxed">
               {subtitle ||
@@ -185,7 +185,7 @@ export default function Hero({
               <div className="relative w-full h-[220px] md:h-[260px]">
                 <Image
                   src="/images/about_hero.png"
-                  alt="Команда DentDoctor"
+                  alt="Команда FindDoctor"
                   fill
                   className="object-cover"
                 />
@@ -193,7 +193,7 @@ export default function Hero({
 
               <div className="p-8 md:p-10 bg-white">
                 <h3 className="text-gray-900 font-bold text-xl mb-8">
-                  DentDoctor в цифрах
+                  FindDoctor в цифрах
                 </h3>
 
                 <div className="grid grid-cols-3 gap-4 text-center">

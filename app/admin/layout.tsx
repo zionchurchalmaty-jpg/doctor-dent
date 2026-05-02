@@ -3,7 +3,7 @@ import { AuthProvider } from "@/components/admin/auth-provider";
 import { AdminGate } from "@/components/admin/admin-gate";
 
 export const metadata: Metadata = {
-  title: "DentDoctor | Admin Panel",
+  title: "FindDoctor | Admin Panel",
   robots: "noindex, nofollow",
 };
 
