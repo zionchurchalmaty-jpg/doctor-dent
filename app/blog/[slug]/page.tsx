@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
 
 interface PageProps {
-  params: Promise<{ locale: string; slug: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({
@@ -35,7 +35,7 @@ export async function generateMetadata({
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const { slug, locale } = await params;
+  const { slug } = await params;
 
   const article = await getContentBySlug(slug, "blog");
 
@@ -70,7 +70,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="border-b border-gray-100 mb-10 pb-4">
           <div className="max-w-4xl mx-auto px-6">
             <Link
-              href={`/${locale}/blog`}
+              href="/blog"
               className="inline-flex items-center text-sm font-medium text-[#2563EB] hover:text-blue-800 transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -128,7 +128,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               Найдите квалифицированного стоматолога в вашем городе
             </p>
             <Link 
-              href={`/search`} 
+              href="/search" 
               className="inline-block bg-[#2563EB] text-white px-10 py-4 rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-sm"
             >
               Выбрать врача

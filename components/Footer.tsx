@@ -1,10 +1,9 @@
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Phone, Mail, MapPin } from 'lucide-react';
 
 export default function Footer() {
   const t = useTranslations('Footer');
-  const locale = useLocale();
 
   return (
     <footer className="bg-[#334155] text-white pt-16 pb-12 font-sans">
@@ -16,7 +15,7 @@ export default function Footer() {
               D
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold leading-none">DentDoctor</span>
+              <span className="text-xl font-bold leading-none">FindDoctor</span>
               <span className="text-[10px] text-slate-400 uppercase tracking-wide">
                 {t('logoSubtitle')}
               </span>
@@ -30,20 +29,20 @@ export default function Footer() {
         <div>
           <h4 className="font-semibold mb-6 text-white">{t('navTitle')}</h4>
           <ul className="space-y-4 text-slate-400 text-sm">
-            <li><Link href={`/${locale}`} className="hover:text-white transition">{t('home')}</Link></li>
-            <li><Link href={`/${locale}/cases`} className="hover:text-white transition">{t('cases')}</Link></li>
-            <li><Link href={`/${locale}/blog`} className="hover:text-white transition">{t('blog')}</Link></li>
-            <li><Link href={`/${locale}/about`} className="hover:text-white transition">{t('about')}</Link></li>
-            <li><a href={`/ru/seo-blog`} className="hover:text-white transition">{t('seo-blog')}</a></li>
+            <li><Link href="/" className="hover:text-white transition">{t('home')}</Link></li>
+            <li><Link href="/cases" className="hover:text-white transition">{t('cases')}</Link></li>
+            <li><Link href="/blog" className="hover:text-white transition">{t('blog')}</Link></li>
+            <li><Link href="/about" className="hover:text-white transition">{t('about')}</Link></li>
+            <li><Link href="/seo-blog" className="hover:text-white transition">{t('seo-blog')}</Link></li>
           </ul>
         </div>
 
         <div>
           <h4 className="font-semibold mb-6 text-white">{t('doctorsTitle')}</h4>
           <ul className="space-y-4 text-slate-400 text-sm">
-            <li><Link href={`/${locale}/for-doctors`} className="hover:text-white transition">{t('rentPage')}</Link></li>
-            <li><Link href={`/${locale}/terms`} className="hover:text-white transition">{t('terms')}</Link></li>
-            <li><Link href={`/${locale}/policy`} className="hover:text-white transition">{t('policy')}</Link></li>
+            <li><Link href="/for-doctors" className="hover:text-white transition">{t('rentPage')}</Link></li>
+            <li><Link href="/terms" className="hover:text-white transition">{t('terms')}</Link></li>
+            <li><Link href="/policy" className="hover:text-white transition">{t('policy')}</Link></li>
           </ul>
         </div>
 
@@ -51,13 +50,13 @@ export default function Footer() {
           <h4 className="font-semibold mb-6 text-white">{t('contactsTitle')}</h4>
           <ul className="space-y-4 text-slate-400 text-sm">
             <li className="flex items-center gap-3">
-<a 
-  href="tel:+77052793078" 
-  className="flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer"
->
-  <Phone className="w-4 h-4" />
-  <span>+7 (705) 279-30-78</span>
-</a>
+              <a 
+                href="tel:+77052793078" 
+                className="flex items-center gap-2 hover:text-[#2563EB] transition-colors cursor-pointer"
+              >
+                <Phone className="w-4 h-4" />
+                <span>+7 (705) 279-30-78</span>
+              </a>
             </li>
             <li className="flex items-center gap-3">
               <Mail className="w-4 h-4" />
@@ -74,7 +73,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-8">
         <div className="border-t border-slate-600 pt-8 flex flex-col md:flex-row justify-between items-start gap-4">
           <p className="text-slate-500 text-xs">
-            © 2026 DentDoctor.kz — {t('allRightsReserved')}
+            © 2026 FindDoctor.kz — {t('allRightsReserved')}
           </p>
           <p className="text-slate-500 text-xs max-w-xl text-left md:text-right">
             {t('disclaimer')}

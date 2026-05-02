@@ -15,34 +15,15 @@ import Hero from "@/components/Hero";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  const lang = locale === "kz" ? "kz" : "ru";
-
-  if (lang === "ru") {
-    return {
-      title: "Лечение зубов. Стоматологи. Cтоматологические клиники - DentDoctor.kz",
-      description: "Ищете стоматолога? DentDoctor.kz — реальные кейсы, отзывы пациентов, цены и лицензии врачей. Сравните и выберите специалиста онлайн за 2 минуты.",
-    };
-  } else {
-    return {
-      title: "Тіс емдеу. Стоматологтар. Стоматологиялық клиникалар - DentDoctor.kz",
-      description: "Стоматолог іздеп жүрсіз бе? DentDoctor.kz — нақты мысалдар, пациенттердің пікірлері, бағалар және дәрігерлердің лицензиялары. 2 минут ішінде маманды онлайн салыстырып, таңдаңыз.",
-    };
-  }
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Найдите своего врача в Казахстане",
+    description: "Ищете врача? FindDoctor.kz — реальные кейсы, отзывы пациентов, цены и лицензии врачей. Сравните и выберите специалиста онлайн за 2 минуты.",
+  };
 }
 
-export default async function HomePage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  const lang = locale === "kz" ? "kz" : "ru";
+export default async function HomePage() {
+  const lang = "ru";
 
   const t = await getTranslations("HomePage");
 
@@ -120,7 +101,7 @@ export default async function HomePage({
                   name={doctor.name?.[lang]}
                   specialty={doctor.specialty?.[lang]}
                   price={lowestPrice}
-                  pricePrefix={lang === "kz" ? "бастап" : "от"}
+                  pricePrefix="от"
                   image={doctor.photo}
                   location={shortLocation}
                   experienceYears={doctor.experienceYears}
@@ -133,7 +114,7 @@ export default async function HomePage({
                   quote={reviewSnippet}
                   isTop={true}
                   topRank={index + 1}
-                  lang={lang as "ru" | "kz"}
+                  lang="ru"
                 />
               </div>
             );
@@ -145,7 +126,7 @@ export default async function HomePage({
               title={t("TopDoctors.promoTitle")}
               subtitle={t("TopDoctors.promoSubtitle")}
               buttonText={t("TopDoctors.promoBtn")}
-              buttonLink={`/for-doctors`}
+              buttonLink="/for-doctors"
             />
           }
         />
@@ -167,8 +148,8 @@ export default async function HomePage({
                     buttonText={promo.buttonText || "Записаться"}
                     link={
                       promo.doctorSlug 
-                        ? `/${locale}/doctor/${promo.doctorSlug}`
-                        : `/${locale}/promos/${promo.id}`
+                        ? `/doctor/${promo.doctorSlug}`
+                        : `/promos/${promo.id}`
                     }
                   />
                 </div>
@@ -192,7 +173,7 @@ export default async function HomePage({
                   </div>
 
                   <Link
-                    href={`/for-doctors`}
+                    href="/for-doctors"
                     className="w-full md:w-auto px-6 py-3 bg-[#FF5A00] hover:bg-[#E04D00] transition-colors text-white font-semibold rounded-xl text-sm whitespace-nowrap text-center"
                   >
                     {t("Promos.buttonText")} 
@@ -203,26 +184,24 @@ export default async function HomePage({
           </section>
         )}
 
-{categoriesWithDoctors.map((category) => {
+        {categoriesWithDoctors.map((category) => {
           if (category.doctors.length === 0) return null;
 
           const formattedPrice = category.basePrice
-            ? new Intl.NumberFormat(lang === "kz" ? "kk-KZ" : "ru-RU")
+            ? new Intl.NumberFormat("ru-RU")
                 .format(category.basePrice)
                 .replace(/,/g, " ")
             : null;
 
           const categorySubtitle = (
             <div className="space-y-3 md:space-y-4">
-              <p>{category.description?.[lang]}</p>
+              <p>{category.description?.ru}</p>
               {formattedPrice && (
                 <Link
-                  href={`/${locale}/services`}
+                  href="/services"
                   className="inline-block text-[#1A73E8] font-medium hover:text-blue-800 transition-colors text-sm"
                 >
-                  {lang === "kz"
-                    ? `Шамамен құны: ${formattedPrice} ₸ бастап`
-                    : `Примерная стоимость: от ${formattedPrice} ₸`}
+                  {`Примерная стоимость: от ${formattedPrice} ₸`}
                 </Link>
               )}
             </div>
@@ -231,7 +210,7 @@ export default async function HomePage({
           return (
             <div key={category.id} className="mt-10 md:mt-16">
               <ContentGrid
-                title={category.title[lang]}
+                title={category.title.ru}
                 subtitle={categorySubtitle}
                 items={category.doctors.map((doctor: DoctorProfile) => {
                   const reviews = doctor.reviews || [];
@@ -264,7 +243,7 @@ export default async function HomePage({
                         name={doctor.name?.[lang]}
                         specialty={doctor.specialty?.[lang]}
                         price={lowestPrice}
-                        pricePrefix={lang === "kz" ? "бастап" : "от"}
+                        pricePrefix="от"
                         image={doctor.photo}
                         location={shortLocation}
                         experienceYears={doctor.experienceYears}
@@ -276,7 +255,7 @@ export default async function HomePage({
                         }
                         views={doctor.views}
                         quote={reviewSnippet}
-                        lang={lang as "ru" | "kz"}
+                        lang="ru"
                       />
                     </div>
                   );
@@ -287,12 +266,10 @@ export default async function HomePage({
                 bottomContent={
                   <div className="flex justify-center mt-6 md:mt-10">
                     <Link
-                      href={`/${locale}/search?specialty=${encodeURIComponent(category.title[lang])}`}
+                      href={`/search?specialty=${encodeURIComponent(category.title.ru)}`}
                       className="inline-flex items-center justify-center px-8 py-3.5 font-medium rounded-xl text-[#2563EB] bg-blue-50 hover:bg-blue-100 transition-colors shadow-sm"
                     >
-                      {lang === "kz" 
-                        ? `Барлық дәрігерлер (${category.title[lang]})` 
-                        : `Все врачи направления «${category.title[lang]}»`}
+                      {`Все врачи направления «${category.title.ru}»`}
                     </Link>
                   </div>
                 }
@@ -304,18 +281,16 @@ export default async function HomePage({
 
       <section className="bg-[#2563EB] w-full py-12 md:py-16 mt-12 md:mt-20 flex flex-col items-center justify-center text-center px-6">
         <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 md:mb-5 tracking-wide">
-          {lang === "kz" ? "Сіз тіс дәрігерісіз бе?" : "Вы стоматолог?"}
+          Вы стоматолог?
         </h2>
         <p className="text-white/90 text-sm md:text-lg mb-6 md:mb-8 max-w-2xl tracking-wide font-light">
-          {lang === "kz"
-            ? "DentDoctor.kz сайтында өз парақшаңызды орналастырыңыз және пациенттерді тікелей қабылдаңыз"
-            : "Разместите свою страницу на DentDoctor.kz и получайте пациентов напрямую"}
+          Разместите свою страницу на FindDoctor.kz и получайте пациентов напрямую
         </p>
         <Link
-          href={`/${locale}/for-doctors`} 
+          href="/for-doctors" 
           className="bg-white text-[#2563EB] hover:bg-blue-50 transition-colors px-6 md:px-8 py-3 rounded-xl font-medium text-sm md:text-base shadow-sm w-full md:w-auto"
         >
-          {lang === "kz" ? "Толығырақ білу" : "Узнать подробнее"}
+          Узнать подробнее
         </Link>
       </section>
     </div>

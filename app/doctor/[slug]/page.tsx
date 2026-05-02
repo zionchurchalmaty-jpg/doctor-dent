@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getContentBySlug, getContentById } from "@/lib/firestore/client-content";
 import { DoctorProfile } from "@/lib/firestore/types";
-import { setRequestLocale } from "next-intl/server";
 import Hero from "@/components/Hero";
 import { DoctorInfo } from "@/components/doctors/DoctorInfo";
 import { DoctorExperience } from "@/components/doctors/DoctorExperience";
@@ -12,13 +11,12 @@ import { ViewTracker } from "@/components/doctors/ViewTracker";
 
 interface DoctorPageProps {
   params: Promise<{
-    locale: string;
     slug: string;
   }>;
 }
 
 export async function generateMetadata({ params }: DoctorPageProps) {
-  const { slug, locale } = await params;
+  const { slug } = await params;
 
   let doc = await getContentBySlug(slug, "doctors");
   if (!doc) {
@@ -28,7 +26,7 @@ export async function generateMetadata({ params }: DoctorPageProps) {
   if (!doc) return {};
 
   const doctor = doc as unknown as DoctorProfile;
-  const name = doctor.name?.[locale as "ru" | "kz"] || doctor.name?.ru || "Врач";
+  const name = doctor.name?.ru || "Врач";
 
   return {
     title: doctor.seo?.metaTitle || `${name} — Запись на прием`,
@@ -37,8 +35,8 @@ export async function generateMetadata({ params }: DoctorPageProps) {
 }
 
 export default async function DoctorProfilePage({ params }: DoctorPageProps) {
-  const { locale, slug } = await params;
-  setRequestLocale(locale);
+  const { slug } = await params;
+  
   let content = await getContentBySlug(slug, "doctors");
   if (!content) {
     content = await getContentById(slug, "doctors");
@@ -49,7 +47,6 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
   const doctor = content as unknown as DoctorProfile;
 
   return (
-
     <main className="min-h-screen bg-white pb-20">
       <ViewTracker doctorId={doctor.id} />
       <Hero variant="doctor" doctor={doctor} />

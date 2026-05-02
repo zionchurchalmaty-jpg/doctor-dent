@@ -1,21 +1,22 @@
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, getLocale } from 'next-intl/server';
-import { Inter } from 'next/font/google';
-import Script from 'next/script';
-import './globals.css';
-import type { Metadata } from 'next'; 
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server"; // getLocale больше не импортируем
+import { Inter } from "next/font/google";
+import Script from "next/script";
+import "./globals.css";
+import type { Metadata } from "next";
 
-import ConditionalNavbar from '@/components/ConditionalNavbar';
-import ConditionalFooter from '@/components/ConditionalFooter';
+import ConditionalNavbar from "@/components/ConditionalNavbar";
+import ConditionalFooter from "@/components/ConditionalFooter";
 
 export const metadata: Metadata = {
-  title: 'DentDoctor', 
-  description: 'Платформа для поиска стоматологов с полными профилями, кейсами и отзывами',
+  title: "FindDoctor",
+  description:
+    "Платформа для поиска врачей с полными профилями, кейсами и отзывами",
 };
 
 const inter = Inter({
-  subsets: ['latin', 'cyrillic'],
-  variable: '--font-sans',
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-sans",
 });
 
 export default async function RootLayout({
@@ -23,11 +24,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const locale = (await getLocale()) ?? 'ru';
   const messages = await getMessages();
-  
+
   return (
-    <html lang={locale}>
+    <html lang="ru">
       <head>
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
@@ -49,23 +49,24 @@ export default async function RootLayout({
           `}
         </Script>
       </head>
-      
-      <body className={`${inter.variable} font-sans antialiased min-h-screen bg-gray-50`}>
+
+      <body
+        className={`${inter.variable} font-sans antialiased min-h-screen bg-gray-50`}
+      >
         <noscript>
-          <iframe 
+          <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KPRSBPZ9"
-            height="0" 
-            width="0" 
-            style={{ display: 'none', visibility: 'hidden' }}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
 
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages} locale="ru">
           <ConditionalNavbar />
           {children}
           <ConditionalFooter />
         </NextIntlClientProvider>
-
       </body>
     </html>
   );

@@ -4,19 +4,20 @@ import DoctorCard from "@/components/cards/DoctorCard";
 import SearchWidget from "@/components/SearchWidget";
 
 interface SearchPageProps {
-  params: Promise<{ locale: "ru" | "kz" }>;
   searchParams: Promise<{ city?: string; specialty?: string }>;
 }
 
 export default async function SearchPage({
-  params,
   searchParams,
 }: SearchPageProps) {
-  const { locale } = await params;
   const { city, specialty } = await searchParams;
+  const lang = "ru";
 
-  const t = await getTranslations({ locale, namespace: "SearchPage" });
-  const doctors = await searchDoctors(locale, city, specialty);
+  // Берем переводы для SearchPage (namespace берется автоматически, если настроен i18n.ts)
+  const t = await getTranslations("SearchPage");
+  
+  // В функцию поиска жестко передаем русский язык
+  const doctors = await searchDoctors(lang, city, specialty);
 
   return (
     <main className="min-h-screen bg-gray-50 py-12 font-sans">
@@ -56,20 +57,20 @@ export default async function SearchPage({
                   key={doc.id}
                   id={doc.slug || doc.id}
                   image={doc.photo}
-                  name={doc.name?.[locale] || ""}
-                  specialty={doc.specialty?.[locale] || ""}
+                  name={doc.name?.ru || ""}
+                  specialty={doc.specialty?.ru || ""}
                   rating={rating}
                   reviewsCount={reviewsCount}
                   experienceYears={doc.experienceYears}
                   location={
-                    doc.location?.address?.[locale]?.split(",")[0] || "Алматы"
+                    doc.location?.address?.ru?.split(",")[0] || "Алматы"
                   }
                   views={doc.views}
                   shortDescription={
-                    doc.shortDescription?.[locale] || doc.reasons?.[0]?.[locale]
+                    doc.shortDescription?.ru || doc.reasons?.[0]?.ru
                   }
                   price={minPrice}
-                  lang={locale as "ru" | "kz"}
+                  lang="ru"
                 />
               );
             })}

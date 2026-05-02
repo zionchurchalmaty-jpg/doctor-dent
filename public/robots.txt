@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://dentdoctor.kz
+Host: https://finddoctor.kz
 
 # Sitemaps
-Sitemap: https://dentdoctor.kz/sitemap.xml
+Sitemap: https://finddoctor.kz/sitemap.xml
