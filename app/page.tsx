@@ -281,7 +281,7 @@ export default async function HomePage() {
 
       <section className="bg-[#2563EB] w-full py-12 md:py-16 mt-12 md:mt-20 flex flex-col items-center justify-center text-center px-6">
         <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 md:mb-5 tracking-wide">
-          Вы стоматолог?
+          Вы врач?
         </h2>
         <p className="text-white/90 text-sm md:text-lg mb-6 md:mb-8 max-w-2xl tracking-wide font-light">
           Разместите свою страницу на FindDoctor.kz и получайте пациентов напрямую

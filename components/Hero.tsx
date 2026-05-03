@@ -149,7 +149,7 @@ export default function Hero({
             </h1>
             <p className="text-blue-100 text-lg md:text-xl max-w-lg opacity-90 leading-relaxed">
               {subtitle ||
-                "Платформа для поиска стоматологов с полными профилями, кейсами и отзывами"}
+                "Платформа для поиска врачей с полными профилями, кейсами и отзывами"}
             </p>
 
             <ul className="space-y-5 mt-4">
