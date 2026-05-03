@@ -125,7 +125,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               Нужна консультация?
             </h3>
             <p className="text-gray-600 mb-8 text-base md:text-lg">
-              Найдите квалифицированного стоматолога в вашем городе
+              Найдите квалифицированного врача в вашем городе
             </p>
             <Link 
               href="/search" 

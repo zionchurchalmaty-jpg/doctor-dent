@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Search, MapPin, Loader2 } from "lucide-react";
 import { getSearchFilters } from "@/lib/actions/search";
 import { CITIES } from "@/lib/cities";
 
 export default function SearchWidget() {
+  // Возвращаем переводы
   const t = useTranslations("HomePage.Hero");
-  const locale = useLocale() as "ru" | "kz";
   const router = useRouter();
 
   const [selectedCityId, setSelectedCityId] = useState("");
@@ -26,14 +26,14 @@ export default function SearchWidget() {
   useEffect(() => {
     const fetchFilters = async () => {
       try {
-        const filters = await getSearchFilters(locale);
+        const filters = await getSearchFilters('ru');
         setDbDirections(filters.specialties || []);
       } catch (error) {
         console.error("Ошибка загрузки фильтров:", error);
       }
     };
     fetchFilters();
-  }, [locale]);
+  }, []);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -51,13 +51,12 @@ export default function SearchWidget() {
             if (detectedCity) {
               const matchedCity = CITIES.find(
                 (c) => c.name.ru.toLowerCase() === detectedCity.toLowerCase() || 
-                       c.name.kz.toLowerCase() === detectedCity.toLowerCase() ||
                        c.id.toLowerCase() === detectedCity.toLowerCase()
               );
 
               if (matchedCity) {
                 setSelectedCityId(matchedCity.id);
-                setCityInputText(matchedCity.name[locale]);
+                setCityInputText(matchedCity.name.ru);
               } else {
                 setCityInputText(detectedCity);
               }
@@ -71,7 +70,7 @@ export default function SearchWidget() {
         () => setIsLoadingLocation(false),
       );
     }
-  }, [locale]);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,19 +78,20 @@ export default function SearchWidget() {
     if (selectedCityId) {
       params.append("city", selectedCityId);
     } else if (cityInputText) {
-      const matched = CITIES.find(c => c.name[locale].toLowerCase().includes(cityInputText.toLowerCase()));
+      const matched = CITIES.find(c => c.name.ru.toLowerCase().includes(cityInputText.toLowerCase()));
       if (matched) params.append("city", matched.id);
       else params.append("city", cityInputText);
     }
     
     if (direction) params.append("specialty", direction);
 
-    router.push(`/${locale}/search?${params.toString()}`);
+    // Роутинг без префикса языка
+    router.push(`/search?${params.toString()}`);
   };
 
   const handleCitySelect = (cityObj: typeof CITIES[0]) => {
     setSelectedCityId(cityObj.id);
-    setCityInputText(cityObj.name[locale]);
+    setCityInputText(cityObj.name.ru);
     setShowCityDropdown(false);
   };
 
@@ -104,6 +104,7 @@ export default function SearchWidget() {
         
         <div className="space-y-1 relative">
           <label className="text-xs text-gray-500 font-medium">
+            {/* Перевод */}
             {t("directionLabel")}
           </label>
           <div className="flex items-center border rounded-xl px-3 py-2 bg-white relative focus-within:border-blue-500 transition-colors">
@@ -138,6 +139,7 @@ export default function SearchWidget() {
 
         <div className="space-y-1 relative">
           <label className="text-xs text-gray-500 font-medium flex justify-between">
+            {/* Перевод */}
             {t("cityLabel")}
           </label>
           <div className="flex items-center border rounded-xl px-3 py-2 bg-white relative focus-within:border-blue-500 transition-colors">
@@ -163,14 +165,14 @@ export default function SearchWidget() {
           {showCityDropdown && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white border rounded-xl shadow-lg overflow-hidden z-30 max-h-60 overflow-y-auto">
               {CITIES
-                .filter((c) => c.name[locale].toLowerCase().includes(cityInputText.toLowerCase()))
+                .filter((c) => c.name.ru.toLowerCase().includes(cityInputText.toLowerCase()))
                 .map((cityObj) => (
                   <div
                     key={cityObj.id}
                     className="px-4 py-2 text-sm hover:bg-blue-50 cursor-pointer"
                     onMouseDown={() => handleCitySelect(cityObj)}
                   >
-                    {cityObj.name[locale]}
+                    {cityObj.name.ru}
                   </div>
                 ))}
             </div>
@@ -182,6 +184,7 @@ export default function SearchWidget() {
         type="submit"
         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl transition-colors"
       >
+        {/* Перевод */}
         {t("searchBtn")}
       </button>
     </form>

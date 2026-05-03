@@ -9,7 +9,7 @@ export function Advantages() {
   ];
 
   const doctorAdvantages = [
-    { icon: <Target className="w-6 h-6 text-[#2563EB]" />, title: "Целевая аудитория", desc: "Все посетители сайта — это люди, которые ищут стоматолога. Высокая конверсия в записи." },
+    { icon: <Target className="w-6 h-6 text-[#2563EB]" />, title: "Целевая аудитория", desc: "Все посетители сайта — это люди, которые ищут врача. Высокая конверсия в записи." },
     { icon: <TrendingUp className="w-6 h-6 text-[#2563EB]" />, title: "SEO-продвижение и Google Реклама", desc: "Мы занимаемся продвижением сайта и каждой страницы врача в поисковых системах." },
     { icon: <Contact className="w-6 h-6 text-[#2563EB]" />, title: "Персональная страница", desc: "Разместите портфолио, кейсы, цены и получайте заявки напрямую от пациентов." },
     { icon: <CheckSquare className="w-6 h-6 text-[#2563EB]" />, title: "Простая аренда", desc: "Фиксированная стоимость аренды страницы без скрытых комиссий и процентов от записей." }
@@ -33,7 +33,7 @@ export function Advantages() {
           </div>
 
           <div className="flex flex-col gap-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Для стоматологов</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Для врачей</h3>
             {doctorAdvantages.map((item, idx) => (
               <div key={idx} className="group bg-white p-6 rounded-2xl border border-gray-100 flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-blue-100">
                 <div className="transition-transform duration-300 group-hover:scale-110 w-fit">{item.icon}</div>
