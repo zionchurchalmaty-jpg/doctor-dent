@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import {
   CheckCircle2,
   ArrowRight,
@@ -46,9 +46,14 @@ export default function Hero({
   tags = [],
   stats = { cases: 12, doctors: 38, successRate: "98%" },
 }: HeroProps) {
+  // Инициализируем переводы из ru.json
+  const tHome = useTranslations("HomePage.Hero");
+  const tDoc = useTranslations("DoctorProfile");
+
   if (variant === "rent") {
     return (
       <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
+        {/* ... твой код для rent ... */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col gap-6 text-white relative z-10">
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
@@ -104,7 +109,7 @@ export default function Hero({
               <div className="relative w-full h-[240px] md:h-[280px]">
                 <Image
                   src="/images/for-doctors_hero.png"
-                  alt="Стоматолог за работой"
+                  alt="Врач за работой"
                   fill
                   className="object-cover"
                 />
@@ -120,8 +125,8 @@ export default function Hero({
                     "Быстрая окупаемость инвестиций",
                     "Гибкие тарифы под ваш бюджет",
                     "Полная техническая поддержка",
-                    "Портал на русском и казахском языках",
-                    "Продвижение на двух языках — больше аудитории",
+                    "Персональный профиль",
+                    "Продвижение в поисковых сетях",
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-[#10B981] shrink-0 mt-0.5" />
@@ -142,6 +147,7 @@ export default function Hero({
   if (variant === "about") {
     return (
       <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
+        {/* ... твой код для about ... */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col gap-6 text-white relative z-10">
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
@@ -268,7 +274,7 @@ export default function Hero({
               <div className="relative w-full h-[240px] md:h-[300px]">
                 <Image
                   src="/images/cases_hero.png"
-                  alt="Стоматологический кабинет"
+                  alt="Кабинет врача"
                   fill
                   className="object-cover"
                 />
@@ -317,9 +323,9 @@ export default function Hero({
 
   if (variant === "blog") {
     const blogFeatures = [
-      "Экспертные советы от врачей",
-      "Гиды по процедурам и лечению",
-      "Актуальные новости стоматологии",
+      "Разбор клинических случаев",
+      "Советы от профессионалов",
+      "Актуальные методы лечения"
     ];
 
     return (
@@ -332,7 +338,7 @@ export default function Hero({
               </h1>
               <p className="text-blue-100 text-lg max-w-md">
                 {subtitle ||
-                  "Полезные статьи о стоматологии, здоровье зубов и современных методах лечения"}
+                  "Полезные статьи о современных методах лечения"}
               </p>
             </div>
 
@@ -389,23 +395,13 @@ export default function Hero({
     );
   }
 
-  const tHome = useTranslations("HomePage.Hero");
-  const tDoc = useTranslations("DoctorProfile");
-  const locale = useLocale() as "ru" | "kz";
-
-  const getLocalizedText = (textField: any) => {
-    if (!textField) return null;
-    if (typeof textField === "string") return textField;
-    return textField[locale] || textField["ru"] || null;
-  };
-
   if (variant === "doctor" && doctor) {
-    const rawAddress = getLocalizedText(doctor.location?.address);
+    const rawAddress = doctor.location?.address?.ru;
     const shortAddress = rawAddress ? rawAddress.split(",")[0] : null;
 
     const cityId = doctor.location?.cityId;
     const cityObj = CITIES.find((c) => c.id === cityId);
-    const cityName = cityObj ? cityObj.name[locale] : cityId || "";
+    const cityName = cityObj ? cityObj.name.ru : cityId || "";
 
     const shortLocation =
       cityName && shortAddress
@@ -413,8 +409,8 @@ export default function Hero({
         : cityName || shortAddress || null;
 
     const highlightText =
-      getLocalizedText(doctor.shortDescription) ||
-      getLocalizedText(doctor.reasons?.[0]);
+      doctor.shortDescription?.ru ||
+      doctor.reasons?.[0]?.ru;
 
     let cleanPhone = doctor.location?.phone
       ? doctor.location.phone.replace(/\D/g, "")
@@ -433,7 +429,7 @@ export default function Hero({
           <div className="relative w-64 h-64 md:w-[320px] md:h-[320px] shrink-0 rounded-3xl overflow-hidden shadow-xl">
             <Image
               src={doctor.photo || "/images/placeholder.png"}
-              alt={getLocalizedText(doctor.name) || "Врач"}
+              alt={doctor.name?.ru || "Врач"}
               fill
               className="object-cover"
             />
@@ -442,16 +438,17 @@ export default function Hero({
           <div className="flex flex-col gap-4 text-white w-full pt-2">
             {doctor.specialty && (
               <div className="bg-[#4B84F1] px-3 py-1 rounded-full text-[13px] font-medium w-fit">
-                {getLocalizedText(doctor.specialty)}
+                {doctor.specialty?.ru}
               </div>
             )}
             <h1 className="text-3xl md:text-4xl lg:text-[42px] font-bold leading-tight">
-              {getLocalizedText(doctor.name)}
+              {doctor.name?.ru}
             </h1>
             <div className="flex flex-wrap items-center gap-5 text-sm md:text-base opacity-95 mt-1">
               {doctor.experienceYears ? (
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4" />
+                  {/* Возвращаем перевод для опыта */}
                   {tDoc("experience", { years: doctor.experienceYears })}
                 </span>
               ) : null}
@@ -468,7 +465,7 @@ export default function Hero({
                 <p className="font-medium text-sm md:text-base">
                   {highlightText}
                 </p>
-              </div>
+            </div>
             )}
             <div className="flex flex-wrap gap-3 mt-4">
               <a
@@ -488,6 +485,7 @@ export default function Hero({
                 className="bg-[#4B84F1] hover:bg-[#3A74F0] text-white rounded-xl px-5 h-11 text-sm font-semibold w-full sm:w-auto inline-flex items-center justify-center cursor-pointer"
               >
                 <Phone className="w-4 h-4 mr-2" />
+                {/* Возвращаем перевод для кнопки звонка */}
                 {tDoc("callButton")}
               </a>
             </div>
@@ -505,6 +503,7 @@ export default function Hero({
         <div className="flex flex-col gap-8 text-white relative z-10">
           <div className="space-y-4">
             <h1 className="text-4xl lg:text-6xl font-bold leading-[1.1] whitespace-pre-line">
+              {/* Возвращаем переводы для заголовков */}
               {title || tHome("title")}
             </h1>
             <p className="text-blue-100 text-lg lg:text-xl max-w-md">
@@ -522,7 +521,7 @@ export default function Hero({
                 src={heroImage}
                 alt={
                   topDoctor
-                    ? `Top Doctor: ${getLocalizedText(topDoctor.name)}`
+                    ? `Топ врач: ${topDoctor.name?.ru || ""}`
                     : "Healthcare"
                 }
                 fill
@@ -531,6 +530,7 @@ export default function Hero({
             </div>
             <div className="bg-white text-gray-900 p-6 lg:p-8 flex-1">
               <h3 className="font-bold text-[18px] lg:text-[20px] mb-5">
+                {/* Возвращаем перевод блока 'Почему мы' */}
                 {tHome("whyTitle")}
               </h3>
               <ul className="space-y-4">
@@ -538,6 +538,7 @@ export default function Hero({
                   <li key={num} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-[#10B981] shrink-0 mt-0.5" />
                     <span className="text-[14px] text-gray-600 leading-snug">
+                      {/* Возвращаем перевод причин */}
                       {tHome(`reason${num}` as any)}
                     </span>
                   </li>

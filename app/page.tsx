@@ -15,6 +15,7 @@ import Hero from "@/components/Hero";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Найдите своего врача в Казахстане",
