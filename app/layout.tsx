@@ -1,5 +1,5 @@
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server"; // getLocale больше не импортируем
+import { getMessages } from "next-intl/server";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";

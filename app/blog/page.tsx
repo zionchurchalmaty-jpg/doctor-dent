@@ -69,7 +69,7 @@ export default async function BlogPage() {
                 date={rawDate} 
                 title={article.title}
                 excerpt={article.excerpt || article.description || "..."}
-                link={`/blog/${article.slug}`}
+                link={`/${article.slug}`}
               />
             );
           })}
