@@ -25,6 +25,7 @@ import { CITIES } from "@/lib/cities";
 interface HeroProps {
   variant?: "home" | "blog" | "doctor" | "cases" | "rent" | "about";
   topDoctor?: DoctorProfile | null;
+  topDoctors?: DoctorProfile[];
   doctor?: DoctorProfile;
   title?: string;
   subtitle?: string;
