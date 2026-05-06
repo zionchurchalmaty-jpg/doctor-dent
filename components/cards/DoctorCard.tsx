@@ -62,12 +62,13 @@ export default function DoctorCard({
           #{topRank}
         </div>
       )}
-      <div className="relative h-56 w-full shrink-0 bg-gray-100 rounded-t-[22px] overflow-hidden">
+      
+      <div className="relative w-full aspect-square shrink-0 bg-gray-100 rounded-t-[22px] overflow-hidden">
         <Image
           src={image || "/images/placeholder.png"}
           alt={name || "Doctor"}
           fill
-          className="object-cover"
+          className="object-cover object-top"
         />
       </div>
 

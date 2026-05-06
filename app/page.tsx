@@ -65,7 +65,8 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <Hero topDoctor={heroDoctor} />
+      {/* Передаем массив topDoctors в обновленный Hero */}
+      <Hero topDoctors={topDoctors} topDoctor={heroDoctor} />
 
       <main className="bg-[#F8F9FA] pb-12 md:pb-20 pt-8 md:pt-10">
         <ContentGrid

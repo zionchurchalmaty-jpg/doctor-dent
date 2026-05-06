@@ -244,8 +244,8 @@ export function ContentForm({
       <SelectValue />
     </SelectTrigger>
     <SelectContent>
-      <SelectItem value="blog">В блоге (/blog/slug)</SelectItem>
-      <SelectItem value="seo">SEO-статья (/slug)</SelectItem>
+      <SelectItem value="blog">В блоге</SelectItem>
+      <SelectItem value="seo">SEO-статья</SelectItem>
     </SelectContent>
   </Select>
 </div>

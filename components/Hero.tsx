@@ -40,20 +40,19 @@ interface HeroProps {
 export default function Hero({
   variant = "home",
   topDoctor,
+  topDoctors = [],
   doctor,
   title,
   subtitle,
   tags = [],
   stats = { cases: 12, doctors: 38, successRate: "98%" },
 }: HeroProps) {
-  // Инициализируем переводы из ru.json
   const tHome = useTranslations("HomePage.Hero");
   const tDoc = useTranslations("DoctorProfile");
 
   if (variant === "rent") {
     return (
       <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
-        {/* ... твой код для rent ... */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col gap-6 text-white relative z-10">
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
@@ -147,7 +146,6 @@ export default function Hero({
   if (variant === "about") {
     return (
       <section className="bg-[#1d4ed8] px-6 py-12 md:py-20 lg:py-24 font-sans relative overflow-hidden">
-        {/* ... твой код для about ... */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col gap-6 text-white relative z-10">
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight max-w-xl">
@@ -448,7 +446,6 @@ export default function Hero({
               {doctor.experienceYears ? (
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4" />
-                  {/* Возвращаем перевод для опыта */}
                   {tDoc("experience", { years: doctor.experienceYears })}
                 </span>
               ) : null}
@@ -485,7 +482,6 @@ export default function Hero({
                 className="bg-[#4B84F1] hover:bg-[#3A74F0] text-white rounded-xl px-5 h-11 text-sm font-semibold w-full sm:w-auto inline-flex items-center justify-center cursor-pointer"
               >
                 <Phone className="w-4 h-4 mr-2" />
-                {/* Возвращаем перевод для кнопки звонка */}
                 {tDoc("callButton")}
               </a>
             </div>
@@ -494,60 +490,85 @@ export default function Hero({
       </section>
     );
   }
+    const firstDoc = topDoctors[0] || topDoctor;
+    const secondDoc = topDoctors[1];
+    const thirdDoc = topDoctors[2];
 
-  const heroImage = topDoctor?.photo || "/images/placeholder.png";
+    const img1 = firstDoc?.photo || "/images/placeholder.png";
+    const img2 = secondDoc?.photo || "/images/placeholder.png";
+    const img3 = thirdDoc?.photo || "/images/placeholder.png";
 
-  return (
-    <section className="bg-[#1d4ed8] px-8 py-16 lg:py-24 font-sans relative">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div className="flex flex-col gap-8 text-white relative z-10">
-          <div className="space-y-4">
-            <h1 className="text-4xl lg:text-6xl font-bold leading-[1.1] whitespace-pre-line">
-              {/* Возвращаем переводы для заголовков */}
-              {title || tHome("title")}
-            </h1>
-            <p className="text-blue-100 text-lg lg:text-xl max-w-md">
-              {subtitle || tHome("subtitle")}
-            </p>
+    const alt1 = firstDoc ? `Топ врач: ${firstDoc.name?.ru || "FindDoctor"}` : "Специалист 1";
+    const alt2 = secondDoc ? `Топ врач: ${secondDoc.name?.ru || "FindDoctor"}` : "Специалист 2";
+    const alt3 = thirdDoc ? `Топ врач: ${thirdDoc.name?.ru || "FindDoctor"}` : "Специалист 3";
+
+    return (
+      <section className="bg-[#1d4ed8] px-6 md:px-8 py-16 lg:py-24 font-sans relative overflow-hidden">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          
+          <div className="flex flex-col gap-8 text-white relative z-10">
+            <div className="space-y-4">
+              <h1 className="text-4xl lg:text-6xl font-bold leading-[1.1] whitespace-pre-line">
+                {title || tHome("title")}
+              </h1>
+              <p className="text-blue-100 text-lg lg:text-xl max-w-md">
+                {subtitle || tHome("subtitle")}
+              </p>
+            </div>
+
+            <SearchWidget />
           </div>
 
-          <SearchWidget />
-        </div>
+          <div className="flex justify-center lg:justify-end w-full mt-10 lg:mt-0 relative z-10">
+            <div className="grid grid-cols-2 gap-4 md:gap-6 w-full max-w-[600px] relative mb-12 lg:mb-0">
+              
+              <div className="col-span-1 row-span-2 relative h-[400px] md:h-[540px] rounded-[24px] md:rounded-[32px] overflow-hidden shadow-xl">
+                <Image
+                  src={img1}
+                  alt={alt1}
+                  fill
+                  className="object-cover object-top hover:scale-105 transition-transform duration-700"
+                />
+              </div>
 
-        <div className="flex justify-center lg:justify-end w-full mt-8 lg:mt-0 relative z-10">
-          <div className="w-full max-w-[420px] bg-white rounded-[24px] lg:rounded-[32px] overflow-hidden shadow-2xl flex flex-col">
-            <div className="relative w-full h-[320px] lg:h-[400px]">
-              <Image
-                src={heroImage}
-                alt={
-                  topDoctor
-                    ? `Топ врач: ${topDoctor.name?.ru || ""}`
-                    : "Healthcare"
-                }
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="bg-white text-gray-900 p-6 lg:p-8 flex-1">
-              <h3 className="font-bold text-[18px] lg:text-[20px] mb-5">
-                {/* Возвращаем перевод блока 'Почему мы' */}
-                {tHome("whyTitle")}
-              </h3>
-              <ul className="space-y-4">
-                {[1, 2, 3].map((num) => (
-                  <li key={num} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#10B981] shrink-0 mt-0.5" />
-                    <span className="text-[14px] text-gray-600 leading-snug">
-                      {/* Возвращаем перевод причин */}
-                      {tHome(`reason${num}` as any)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <div className="col-span-1 relative h-[192px] md:h-[258px] rounded-[24px] md:rounded-[32px] overflow-hidden shadow-md">
+                <Image
+                  src={img2}
+                  alt={alt2}
+                  fill
+                  className="object-cover object-top hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+
+              <div className="col-span-1 relative h-[192px] md:h-[258px] rounded-[24px] md:rounded-[32px] overflow-hidden shadow-md">
+                <Image
+                  src={img3}
+                  alt={alt3}
+                  fill
+                  className="object-cover object-top hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+
+              <div className="absolute -bottom-8 -left-2 md:-bottom-10 md:-left-16 bg-white text-gray-900 rounded-[24px] p-6 lg:p-8 shadow-2xl w-[95%] md:w-[380px] z-20 border border-gray-100">
+                <h3 className="font-bold text-[18px] lg:text-[20px] mb-5">
+                  {tHome("whyTitle")}
+                </h3>
+                <ul className="space-y-4">
+                  {[1, 2, 3].map((num) => (
+                    <li key={num} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-[#10B981] shrink-0 mt-0.5" />
+                      <span className="text-[14px] text-gray-600 leading-snug">
+                        {tHome(`reason${num}` as any)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
             </div>
           </div>
+          
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
+    );
+  }
