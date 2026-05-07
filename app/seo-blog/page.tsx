@@ -3,6 +3,8 @@ import ArticleCard from "@/components/cards/ArticleCard";
 import Hero from "@/components/Hero"; 
 import { getPublishedContent } from "@/lib/firestore/client-content";
 
+export const revalidate = 60;
+
 export default async function BlogPage() {
   const rawArticlesData = await getPublishedContent("blog");
   const articlesData = rawArticlesData.filter((article: any) => article.isSeo);
