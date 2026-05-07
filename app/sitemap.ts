@@ -44,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const articleUrls = articles.map((article: any) => {
     const date = article.updatedAt ? new Date(article.updatedAt) : new Date();
-    const path = article.isSeo ? `/${article.slug}` : `/blog/${article.slug}`;
+    const path = `/${article.slug}`;
     const priority = article.isSeo ? 0.9 : 0.7;
     
     return generateUrl(path, date, priority, 'monthly');

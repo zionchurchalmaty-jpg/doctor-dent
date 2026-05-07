@@ -52,7 +52,7 @@ export function ContentList({
   > = {
     blog: {
       basePath: "/admin/blog",
-      publicPath: "/blog",
+      publicPath: "",
       label: "Статья",
       meta: "Теги",
     },
